@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_left_right_add_reunion">16dp</dimen>
+    <dimen name="margin_top_add_reunion">24dp</dimen>
+    <dimen name="image_size_phone_portrait_add_reunion">100dp</dimen>
+    <dimen name="image_size_phone_landscape_add_reunion">60dp</dimen>
+    <dimen name="layout_height_portrait_add_reunion">50dp</dimen>
+    <dimen name="layout_height_landscape_add_reunion">20dp</dimen>
+    <dimen name="text_size_phone_portrait_add_reunion">24sp</dimen>
+    <dimen name="text_size_phone_landscape_add_reunion">20sp</dimen>
+    <dimen name="text_size_tablet_portrait_add_reunion">30sp</dimen>
+    <dimen name="text_size_tablet_landscape_add_reunion">24sp</dimen>
+</resources>

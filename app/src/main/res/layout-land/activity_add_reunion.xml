@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.AddReunionActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_add_reunion_activity_image"
+        android:layout_width="@dimen/image_size_phone_landscape_add_reunion"
+        android:layout_height="@dimen/image_size_phone_landscape_add_reunion"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_launcher" />
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spinner_add_reunion_activity_room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="25"
+        android:entries="@array/rooms"/>
+
+    <TextView
+        android:id="@+id/tv_add_reunion_activity_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="25"
+        android:gravity="center_vertical"
+        android:hint="@string/set_time"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_phone_portrait_add_reunion" />
+
+    <EditText
+        android:id="@+id/et_add_reunion_activity_topic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="25"
+        android:gravity="center_vertical"
+        android:hint="@string/set_topic"
+        android:inputType="text"
+        android:lines="1"
+        android:textSize="@dimen/text_size_phone_portrait_add_reunion" />
+
+    <EditText
+        android:id="@+id/et_add_reunion_activity_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="25"
+        android:gravity="center_vertical"
+        android:hint="@string/set_email"
+        android:inputType="textEmailAddress"
+        android:textSize="@dimen/text_size_phone_portrait_add_reunion" />
+
+    <Button
+        android:id="@+id/btn_add_reunion_activity_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="@string/save_btn_add_reunion"
+        android:textSize="@dimen/text_size_phone_portrait_add_reunion" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

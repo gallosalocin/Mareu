@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Ma réu</string>
+    <string name="filter_list">filter_list</string>
+    <string name="filter_subitem1">sort by room</string>
+    <string name="filter_subitem2">sort by time</string>
+    <string name="save_btn_add_reunion">save</string>
+    <string name="set_time">set time</string>
+    <string name="set_topic">topic</string>
+    <string name="set_email">email</string>
+    
+    <string-array name="rooms">
+        <item>- Choose Room -</item>
+        <item>Room 1</item>
+        <item>Room 2</item>
+        <item>Room 3</item>
+        <item>Room 4</item>
+        <item>Room 5</item>
+        <item>Room 6</item>
+        <item>Room 7</item>
+        <item>Room 8</item>
+        <item>Room 9</item>
+        <item>Room 10</item>
+    </string-array>
+</resources>
