@@ -1,31 +1,35 @@
 package com.gallosalocin.mareu.ui;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.gallosalocin.mareu.R;
-import com.gallosalocin.mareu.model.Reunion;
+import com.gallosalocin.mareu.di.DI;
+import com.gallosalocin.mareu.model.Meeting;
+import com.gallosalocin.mareu.service.MeetingApiService;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.parceler.Parcels;
+
 import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AddReunionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AddMeetingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     @BindView(R.id.tv_add_reunion_activity_time)
     TextView timeTextView;
@@ -38,18 +42,18 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     @BindView(R.id.iv_add_reunion_activity_image)
     ImageView imageImageView;
 
-    List<Reunion> reunionList;
-    ReunionRecycleViewAdapter reunionRecycleViewAdapter;
-
+    private MeetingApiService meetingApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_reunion);
+        setContentView(R.layout.activity_add_meeting);
         ButterKnife.bind(this);
 
         configTimePicker();
         configSpinner();
+
+        meetingApiService = DI.getMeetingApiService();               //  ???
 
     }
 
@@ -64,12 +68,12 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
             @Override
             public void onClick(View view) {
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddReunionActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(AddMeetingActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         timeTextView.setText(checkDigit(hourOfDay) + "h" + checkDigit(minute));
                     }
-                }, hour, minute, DateFormat.is24HourFormat(AddReunionActivity.this));
+                }, hour, minute, DateFormat.is24HourFormat(AddMeetingActivity.this));
                 timePickerDialog.show();
             }
         });
@@ -88,7 +92,8 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (parent.getItemAtPosition(position).equals("Choose Room")){
+        if (parent.getItemAtPosition(position).equals("- Choose Room -")) {
+            Toast.makeText(this, "- Choose room -", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -99,22 +104,22 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     private boolean validateTime() {
         String timeInput = timeTextView.getText().toString().trim();
 
-        if (timeInput.isEmpty()){
+        if (timeInput.isEmpty()) {
             timeTextView.setError("Field can't be empty");
             return false;
-        } else{
+        } else {
             timeTextView.setError(null);
             return true;
         }
     }
 
-    private boolean validateTopic(){
+    private boolean validateTopic() {
         String topicInput = topicInputText.getEditText().getText().toString().trim();
 
-        if (topicInput.isEmpty()){
+        if (topicInput.isEmpty()) {
             topicInputText.setError("Field can't be empty");
             return false;
-        } else{
+        } else {
             topicInputText.setError(null);
             return true;
         }
@@ -133,8 +138,14 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     }
 
     public void saveInput(View view) {
-        if (!validateEmail() | !validateTopic() | validateTime()){
+        if (!validateEmail() | !validateTopic() | !validateTime()) {
             return;
+        } else {
+            Meeting meeting = new Meeting(topicInputText.getEditText().getText().toString(), timeTextView.getText().toString(), roomsSpinner.getSelectedItem().toString(), emailInputText.getEditText().getText().toString());
+            Intent intent = new Intent(this, MainActivity.class);
+            meetingApiService.createMeeting(meeting);
+            intent.putExtra("meeting", Parcels.wrap(meeting));
+            startActivity(intent);
         }
     }
 }

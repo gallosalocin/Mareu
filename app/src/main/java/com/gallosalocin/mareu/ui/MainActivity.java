@@ -2,7 +2,6 @@ package com.gallosalocin.mareu.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,10 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gallosalocin.mareu.R;
-import com.gallosalocin.mareu.model.Reunion;
+import com.gallosalocin.mareu.di.DI;
+import com.gallosalocin.mareu.model.Meeting;
+import com.gallosalocin.mareu.service.MeetingApiService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import org.parceler.Parcels;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -25,32 +27,41 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements ReunionRecycleViewAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements MeetingRecycleViewAdapter.OnItemClickListener {
 
-    private static final String TAG = "MainActivity";
+    //    private static final String TAG = "MainActivity";
 
-    @BindView(R.id.recyclerview_main_reunion)
+    @BindView(R.id.recyclerview_main_meeting)
     RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.fab_main_add_reunion)
-    FloatingActionButton fabAddReunion;
+    @BindView(R.id.fab_main_add_meeting)
+    FloatingActionButton fabAddMeeting;
 
-    private List<Reunion> reunionList;
-    private ReunionRecycleViewAdapter reunionRecycleViewAdapter;
+    private List<Meeting> meetingList;
+    private Meeting meeting;
+    private MeetingRecycleViewAdapter meetingRecycleViewAdapter;
 
-    //    ReunionApiService reunionApiService;                            // new
+    MeetingApiService meetingApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        meetingApiService = DI.getMeetingApiService();
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        Log.d(TAG, "onCreate: started.");
-        configFabAddReunion();
-        createReunionsList();
+
+        configFabAddMeeting();
         initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        meeting = Parcels.unwrap(getIntent().getParcelableExtra("meeting"));
+        meetingList = meetingApiService.getMeetings();
+        meetingRecycleViewAdapter = new MeetingRecycleViewAdapter(meetingList, this);
+        recyclerView.setAdapter(meetingRecycleViewAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -74,9 +85,9 @@ public class MainActivity extends AppCompatActivity implements ReunionRecycleVie
     }
 
     public void sortListByRoom() {
-        Collections.sort(reunionList, new Comparator<Reunion>() {
+        Collections.sort(meetingList, new Comparator<Meeting>() {
             @Override
-            public int compare(Reunion o1, Reunion o2) {
+            public int compare(Meeting o1, Meeting o2) {
                 initRecyclerView();
                 return o1.getRoom().compareTo(o2.getRoom());
             }
@@ -84,39 +95,26 @@ public class MainActivity extends AppCompatActivity implements ReunionRecycleVie
     }
 
     public void sortListByTime() {
-        Collections.sort(reunionList, new Comparator<Reunion>() {
+        Collections.sort(meetingList, new Comparator<Meeting>() {
             @Override
-            public int compare(Reunion o1, Reunion o2) {
+            public int compare(Meeting o1, Meeting o2) {
                 initRecyclerView();
                 return o1.getTime().compareTo(o2.getTime());
             }
         });
     }
 
-    private void initRecyclerView() {
-        reunionRecycleViewAdapter = new ReunionRecycleViewAdapter(reunionList, this);
-        recyclerView.setAdapter(reunionRecycleViewAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private void createReunionsList() {
-        reunionList = new ArrayList<>();
-        reunionList.add(new Reunion("Reunion AAA", "10h00", "Salle C", "maxime@lamzone.com, alex@lamzone.com, nicolas@gmail.com"));
-        reunionList.add(new Reunion("Reunion CCC", "17h00", "Salle B", "maxime@lamzone.com, alex@lamzone.com, nicolas@gmail.com"));
-        reunionList.add(new Reunion("Reunion BBB", "14h00", "Salle A", "maxime@lamzone.com, alex@lamzone.com, nicolas@gmail.com"));
-    }
-
     @Override
     public void onDeleteClick(int position) {
-        reunionList.remove(position);
-        reunionRecycleViewAdapter.notifyItemRemoved(position);
+        meetingList.remove(position);
+        meetingRecycleViewAdapter.notifyItemRemoved(position);
     }
 
-    public void configFabAddReunion() {
-        fabAddReunion.setOnClickListener(new View.OnClickListener() {
+    public void configFabAddMeeting() {
+        fabAddMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddReunionActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddMeetingActivity.class);
                 startActivity(intent);
             }
         });

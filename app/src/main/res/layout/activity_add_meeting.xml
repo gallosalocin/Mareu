@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.AddReunionActivity">
+    tools:context=".ui.AddMeetingActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_add_reunion_activity_image"

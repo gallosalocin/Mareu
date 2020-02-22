@@ -1,19 +1,18 @@
 package com.gallosalocin.mareu.model;
 
-public class Reunion {
+import org.parceler.Parcel;
 
-    private String topic, time, room, email;
+@Parcel public class Meeting {
 
+    String topic, time, room, email;
 
-    public Reunion(String topic, String time, String room, String email) {
+    public Meeting() {
+    }
+
+    public Meeting(String topic, String time, String room, String email) {
         this.topic = topic;
         this.time = time;
         this.room = room;
-        this.email = email;
-    }
-
-    public Reunion(String topic, String email) {
-        this.topic = topic;
         this.email = email;
     }
 

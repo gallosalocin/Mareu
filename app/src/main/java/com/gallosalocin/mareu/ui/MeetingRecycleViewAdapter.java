@@ -12,7 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gallosalocin.mareu.R;
-import com.gallosalocin.mareu.model.Reunion;
+import com.gallosalocin.mareu.model.Meeting;
 
 import java.util.List;
 
@@ -21,13 +21,13 @@ import butterknife.ButterKnife;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ReunionRecycleViewAdapter extends RecyclerView.Adapter<ReunionRecycleViewAdapter.ViewHolder> {
+public class MeetingRecycleViewAdapter extends RecyclerView.Adapter<MeetingRecycleViewAdapter.ViewHolder> {
 
-    private List<Reunion> reunionsList;
+    private List<Meeting> meetingsList;
     private OnItemClickListener onItemClickListener;
 
-    public ReunionRecycleViewAdapter(List<Reunion> reunions, OnItemClickListener onItemClickListener) {
-        this.reunionsList = reunions;
+    public MeetingRecycleViewAdapter(List<Meeting> meetings, OnItemClickListener onItemClickListener) {
+        this.meetingsList = meetings;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -42,17 +42,17 @@ public class ReunionRecycleViewAdapter extends RecyclerView.Adapter<ReunionRecyc
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
-        Reunion reunion = reunionsList.get(position);
-        holder.topic.setText(reunion.getTopic());
-        holder.time.setText(reunion.getTime());
-        holder.room.setText(reunion.getRoom());
-        holder.email.setText(reunion.getEmail());
+        Meeting meeting = meetingsList.get(position);
+        holder.topic.setText(meeting.getTopic());
+        holder.time.setText(meeting.getTime());
+        holder.room.setText(meeting.getRoom());
+        holder.email.setText(meeting.getEmail());
 
     }
 
     @Override
     public int getItemCount() {
-        return reunionsList.size();
+        return meetingsList.size();
     }
 
 
