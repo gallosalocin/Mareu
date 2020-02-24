@@ -8,7 +8,7 @@
     tools:context=".ui.AddMeetingActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_add_reunion_activity_image"
+        android:id="@+id/iv_add_reunion_activity_room_color"
         android:layout_width="@dimen/image_size_phone_landscape_add_reunion"
         android:layout_height="@dimen/image_size_phone_landscape_add_reunion"
         android:layout_gravity="center"
@@ -34,7 +34,7 @@
         android:textSize="@dimen/text_size_phone_portrait_add_reunion" />
 
     <EditText
-        android:id="@+id/et_add_reunion_activity_topic"
+        android:id="@+id/ti_add_reunion_activity_topic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -46,7 +46,7 @@
         android:textSize="@dimen/text_size_phone_portrait_add_reunion" />
 
     <EditText
-        android:id="@+id/et_add_reunion_activity_email"
+        android:id="@+id/ti_add_reunion_activity_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

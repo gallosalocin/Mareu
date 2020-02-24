@@ -7,7 +7,8 @@
     <string name="set_time">set time</string>
     <string name="set_topic">topic</string>
     <string name="set_email">email</string>
-    
+    <string name="time_picker">%1$dh%2$d</string>
+
     <string-array name="rooms">
         <item>- Choose Room -</item>
         <item>Room 1</item>

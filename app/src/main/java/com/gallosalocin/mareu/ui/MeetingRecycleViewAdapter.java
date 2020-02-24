@@ -43,6 +43,7 @@ public class MeetingRecycleViewAdapter extends RecyclerView.Adapter<MeetingRecyc
         Log.d(TAG, "onBindViewHolder: called.");
 
         Meeting meeting = meetingsList.get(position);
+        holder.roomColor.setImageResource(meeting.getRoomColor());
         holder.topic.setText(meeting.getTopic());
         holder.time.setText(meeting.getTime());
         holder.room.setText(meeting.getRoom());

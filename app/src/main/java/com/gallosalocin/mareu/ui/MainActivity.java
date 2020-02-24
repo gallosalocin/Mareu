@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,7 +20,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.parceler.Parcels;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements MeetingRecycleVie
     FloatingActionButton fabAddMeeting;
 
     private List<Meeting> meetingList;
-    private Meeting meeting;
     private MeetingRecycleViewAdapter meetingRecycleViewAdapter;
 
     MeetingApiService meetingApiService;
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecycleVie
     }
 
     private void initRecyclerView() {
-        meeting = Parcels.unwrap(getIntent().getParcelableExtra("meeting"));
+        Parcels.unwrap(getIntent().getParcelableExtra("meeting"));
         meetingList = meetingApiService.getMeetings();
         meetingRecycleViewAdapter = new MeetingRecycleViewAdapter(meetingList, this);
         recyclerView.setAdapter(meetingRecycleViewAdapter);
@@ -85,22 +82,16 @@ public class MainActivity extends AppCompatActivity implements MeetingRecycleVie
     }
 
     public void sortListByRoom() {
-        Collections.sort(meetingList, new Comparator<Meeting>() {
-            @Override
-            public int compare(Meeting o1, Meeting o2) {
-                initRecyclerView();
-                return o1.getRoom().compareTo(o2.getRoom());
-            }
+        Collections.sort(meetingList, (o1, o2) -> {
+            initRecyclerView();
+            return o1.getRoom().compareTo(o2.getRoom());
         });
     }
 
     public void sortListByTime() {
-        Collections.sort(meetingList, new Comparator<Meeting>() {
-            @Override
-            public int compare(Meeting o1, Meeting o2) {
-                initRecyclerView();
-                return o1.getTime().compareTo(o2.getTime());
-            }
+        Collections.sort(meetingList, (o1, o2) -> {
+            initRecyclerView();
+            return o1.getTime().compareTo(o2.getTime());
         });
     }
 
@@ -111,13 +102,9 @@ public class MainActivity extends AppCompatActivity implements MeetingRecycleVie
     }
 
     public void configFabAddMeeting() {
-        fabAddMeeting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddMeetingActivity.class);
-                startActivity(intent);
-            }
+        fabAddMeeting.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AddMeetingActivity.class);
+            startActivity(intent);
         });
     }
-
 }

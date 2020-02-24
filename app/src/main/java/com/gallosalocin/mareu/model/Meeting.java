@@ -5,15 +5,25 @@ import org.parceler.Parcel;
 @Parcel public class Meeting {
 
     String topic, time, room, email;
+    int roomColor;
 
     public Meeting() {
     }
 
-    public Meeting(String topic, String time, String room, String email) {
+    public Meeting(int roomColor, String topic, String time, String room, String email) {
+        this.roomColor = roomColor;
         this.topic = topic;
         this.time = time;
         this.room = room;
         this.email = email;
+    }
+
+    public int getRoomColor() {
+        return roomColor;
+    }
+
+    public void setRoomColor(int roomColor) {
+        this.roomColor = roomColor;
     }
 
     public String getRoom() {

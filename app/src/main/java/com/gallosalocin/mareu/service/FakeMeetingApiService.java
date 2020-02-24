@@ -18,4 +18,5 @@ public class FakeMeetingApiService implements MeetingApiService {
     public void createMeeting(Meeting meeting) {
         meetingList.add(meeting);
     }
+
 }
