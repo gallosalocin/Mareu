@@ -21,12 +21,12 @@ import butterknife.ButterKnife;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class MeetingRecycleViewAdapter extends RecyclerView.Adapter<MeetingRecycleViewAdapter.ViewHolder> {
+public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewAdapter.ViewHolder> {
 
     private List<Meeting> meetingsList;
     private OnItemClickListener onItemClickListener;
 
-    public MeetingRecycleViewAdapter(List<Meeting> meetings, OnItemClickListener onItemClickListener) {
+    public MeetingRecyclerViewAdapter(List<Meeting> meetings, OnItemClickListener onItemClickListener) {
         this.meetingsList = meetings;
         this.onItemClickListener = onItemClickListener;
     }
@@ -57,26 +57,26 @@ public class MeetingRecycleViewAdapter extends RecyclerView.Adapter<MeetingRecyc
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.iv_cardview_image)
-        public ImageView roomColor;
+        ImageView roomColor;
         @BindView(R.id.tv_cardview_topic)
-        public TextView topic;
+        TextView topic;
         @BindView(R.id.tv_cardview_time)
-        public TextView time;
+        TextView time;
         @BindView(R.id.tv_cardview_room)
-        public TextView room;
+        TextView room;
         @BindView(R.id.tv_cardview_email)
-        public TextView email;
+        TextView email;
         @BindView(R.id.iv_cardview_delete_btn)
-        public ImageView deleteImage;
-        @BindView(R.id.cardview_cardview)
-        public CardView cardView;
+        ImageView deleteImage;
+        @BindView(R.id.cardview_meeting)
+        CardView cardView;
 
         OnItemClickListener onItemClickListener;
 
-        public ViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
+        ViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.onItemClickListener = onItemClickListener;
@@ -86,11 +86,8 @@ public class MeetingRecycleViewAdapter extends RecyclerView.Adapter<MeetingRecyc
 
         @Override
         public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.iv_cardview_delete_btn:
-                    onItemClickListener.onDeleteClick(getAdapterPosition());
-                    Log.d(TAG, "onDeleteClick: clicked -> " + getAdapterPosition());
-                    break;
+            if (view.getId() == R.id.iv_cardview_delete_btn) {
+                onItemClickListener.onDeleteClick(getAdapterPosition());
             }
         }
     }

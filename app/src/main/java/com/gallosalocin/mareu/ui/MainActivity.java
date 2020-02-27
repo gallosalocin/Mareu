@@ -5,49 +5,41 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.gallosalocin.mareu.R;
+import com.gallosalocin.mareu.databinding.ActivityMainBinding;
 import com.gallosalocin.mareu.di.DI;
 import com.gallosalocin.mareu.model.Meeting;
 import com.gallosalocin.mareu.service.MeetingApiService;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.parceler.Parcels;
 
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class MainActivity extends AppCompatActivity implements MeetingRecycleViewAdapter.OnItemClickListener {
-
-    //    private static final String TAG = "MainActivity";
-
-    @BindView(R.id.recyclerview_main_meeting)
-    RecyclerView recyclerView;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.fab_main_add_meeting)
-    FloatingActionButton fabAddMeeting;
+public class MainActivity extends AppCompatActivity implements MeetingRecyclerViewAdapter.OnItemClickListener {
 
     private List<Meeting> meetingList;
-    private MeetingRecycleViewAdapter meetingRecycleViewAdapter;
+    private MeetingRecyclerViewAdapter meetingRecyclerViewAdapter;
+
+    private ActivityMainBinding binding;
 
     MeetingApiService meetingApiService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         meetingApiService = DI.getMeetingApiService();
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
+        setSupportActionBar(binding.toolbar);
 
         configFabAddMeeting();
         initRecyclerView();
@@ -56,9 +48,9 @@ public class MainActivity extends AppCompatActivity implements MeetingRecycleVie
     private void initRecyclerView() {
         Parcels.unwrap(getIntent().getParcelableExtra("meeting"));
         meetingList = meetingApiService.getMeetings();
-        meetingRecycleViewAdapter = new MeetingRecycleViewAdapter(meetingList, this);
-        recyclerView.setAdapter(meetingRecycleViewAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingList, this);
+        binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -98,11 +90,11 @@ public class MainActivity extends AppCompatActivity implements MeetingRecycleVie
     @Override
     public void onDeleteClick(int position) {
         meetingList.remove(position);
-        meetingRecycleViewAdapter.notifyItemRemoved(position);
+        meetingRecyclerViewAdapter.notifyItemRemoved(position);
     }
 
     public void configFabAddMeeting() {
-        fabAddMeeting.setOnClickListener(view -> {
+        binding.fabAddMeeting.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddMeetingActivity.class);
             startActivity(intent);
         });
