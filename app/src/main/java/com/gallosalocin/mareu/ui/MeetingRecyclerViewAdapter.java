@@ -26,7 +26,7 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
     private List<Meeting> meetingsList;
     private OnItemClickListener onItemClickListener;
 
-    public MeetingRecyclerViewAdapter(List<Meeting> meetings, OnItemClickListener onItemClickListener) {
+    MeetingRecyclerViewAdapter(List<Meeting> meetings, OnItemClickListener onItemClickListener) {
         this.meetingsList = meetings;
         this.onItemClickListener = onItemClickListener;
     }
