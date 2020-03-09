@@ -4,18 +4,19 @@ import org.parceler.Parcel;
 
 @Parcel public class Meeting {
 
-    String topic, time, room, email;
+    String topic, date, time, room, email;
     int roomColor;
 
     public Meeting() {
     }
 
-    public Meeting(int roomColor, String topic, String time, String room, String email) {
+    public Meeting(int roomColor, String topic, String date, String time, String room, String email) {
         this.roomColor = roomColor;
         this.topic = topic;
         this.time = time;
         this.room = room;
         this.email = email;
+        this.date = date;
     }
 
     public int getRoomColor() {
@@ -32,6 +33,14 @@ import org.parceler.Parcel;
 
     public void setLieu(String room) {
         this.room = room;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getTime() {

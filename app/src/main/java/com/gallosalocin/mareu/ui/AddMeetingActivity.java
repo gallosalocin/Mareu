@@ -1,5 +1,6 @@
 package com.gallosalocin.mareu.ui;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -20,6 +22,7 @@ import com.gallosalocin.mareu.databinding.ActivityAddMeetingBinding;
 import com.gallosalocin.mareu.di.DI;
 import com.gallosalocin.mareu.model.Meeting;
 import com.gallosalocin.mareu.service.MeetingApiService;
+import com.gallosalocin.mareu.utils.DatePickerFragment;
 import com.gallosalocin.mareu.utils.Room;
 import com.gallosalocin.mareu.utils.TimePickerFragment;
 import com.google.android.material.chip.Chip;
@@ -28,18 +31,24 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.parceler.Parcels;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-public class AddMeetingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePickerDialog.OnTimeSetListener {
+public class AddMeetingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
     private MeetingApiService meetingApiService;
 
     private ActivityAddMeetingBinding binding;
 
     private TextView textViewTime;
+    private TextView textViewDate;
     private TextInputEditText textInputEditTextEmail;
+    private String emailChip = "";
+    private Calendar calendar = Calendar.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +58,16 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         View view = binding.getRoot();
         setContentView(view);
         textViewTime = findViewById(R.id.text_view_time);
+        textViewDate = findViewById(R.id.text_view_date);
         textInputEditTextEmail = findViewById(R.id.text_input_email);
         textInputEditTextEmail.setOnEditorActionListener(editorListener);
+        meetingApiService = DI.getMeetingApiService();
 
+        configDatePicker();
         configTimePicker();
         configSpinner();
         saveMeeting();
 
-        meetingApiService = DI.getMeetingApiService();
 
     }
 
@@ -72,6 +83,7 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
             Objects.requireNonNull(binding.chipGroup).removeView(chip);
         });
         Objects.requireNonNull(binding.chipGroup).addView(chip);
+        emailChip += chip.getText() + ", ";
         textInputEditTextEmail.setText("");
     }
 
@@ -91,6 +103,24 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         }
         return true;
     };
+
+    // CONFIGURATION DatePicker
+
+    public void configDatePicker() {
+        textViewDate.setOnClickListener(view -> {
+            DialogFragment datePicker = new DatePickerFragment();
+            datePicker.show(getSupportFragmentManager(), "date picker");
+        });
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(calendar.getTime());
+        textViewDate.setText(currentDate);
+    }
 
     // CONFIGURATION TimePicker
 
@@ -158,6 +188,18 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         }
     }
 
+    private boolean validateDate() {
+        String dateInput = textViewDate.getText().toString().trim();
+
+        if (dateInput.isEmpty()) {
+            textViewDate.setError("Field can't be empty");
+            return false;
+        } else {
+            textViewDate.setError(null);
+            return true;
+        }
+    }
+
     private boolean validateTime() {
         String timeInput = textViewTime.getText().toString().trim();
 
@@ -182,11 +224,8 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         }
     }
 
-
     private boolean validateEmail() {
-        String emailInput = binding.textInputEmailLayout.getEditText().getText().toString().trim();
-
-        if (emailInput.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
+        if (emailChip.isEmpty()) {
             binding.textInputEmailLayout.setError("Please enter a valid email address");
             return false;
         } else {
@@ -197,9 +236,10 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
 
     public void saveMeeting() {
         binding.buttonSave.setOnClickListener(view -> {
-            if (!validateRoom() | !validateTopic() | !validateTime() | !validateEmail()) {
+            if (!validateRoom() | !validateTopic() | !validateDate() | !validateTime() | !validateEmail()) {
             } else {
-                Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(), binding.textInputTopicLayout.getEditText().getText().toString(), textViewTime.getText().toString(), binding.spinnerRoom.getSelectedItem().toString(), binding.chipGroup.toString());
+                emailChip = emailChip.substring(0, emailChip.length() - 2) + "";
+                Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(), binding.textInputTopicLayout.getEditText().getText().toString(), textViewDate.getText().toString(), textViewTime.getText().toString(), binding.spinnerRoom.getSelectedItem().toString(), emailChip);
                 Intent intent = new Intent(AddMeetingActivity.this, MainActivity.class);
                 meetingApiService.createMeeting(meeting);
                 intent.putExtra("meeting", Parcels.wrap(meeting));

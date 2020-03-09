@@ -11,12 +11,68 @@
         <menu>
 
             <item
-                android:id="@+id/subitem_toolbar_sort_name"
-                android:title="@string/filter_subitem1" />
+                android:id="@+id/item_toolbar_reset_filter"
+                android:title="@string/filter_item_reset" />
 
             <item
-                android:id="@+id/subitem_toolbar_sort_time"
-                android:title="@string/filter_subitem2" />
+                android:id="@+id/item_toolbar_sort_name"
+                android:title="@string/filter_item_name" />
+
+            <item
+                android:id="@+id/item_toolbar_sort_time"
+                android:title="@string/filter_item_time" />
+
+            <item
+                android:id="@+id/item_toolbar_filter_date"
+                android:title="@string/filter_item_date" />
+
+            <item
+                android:id="@+id/item_toolbar_filter_room"
+                android:title="@string/filter_item_room">
+
+                <menu>
+
+                    <item
+                        android:id="@+id/subitem_room_a"
+                        android:title="@string/subitem_room_a" />
+
+                    <item
+                        android:id="@+id/subitem_room_b"
+                        android:title="@string/subitem_room_b" />
+
+                    <item
+                        android:id="@+id/subitem_room_c"
+                        android:title="@string/subitem_room_c" />
+
+                    <item
+                        android:id="@+id/subitem_room_d"
+                        android:title="@string/subitem_room_d" />
+
+                    <item
+                        android:id="@+id/subitem_room_e"
+                        android:title="@string/subitem_room_e" />
+
+                    <item
+                        android:id="@+id/subitem_room_f"
+                        android:title="@string/subitem_room_f" />
+
+                    <item
+                        android:id="@+id/subitem_room_g"
+                        android:title="@string/subitem_room_g" />
+
+                    <item
+                        android:id="@+id/subitem_room_h"
+                        android:title="@string/subitem_room_h" />
+
+                    <item
+                        android:id="@+id/subitem_room_i"
+                        android:title="@string/subitem_room_i" />
+
+                    <item
+                        android:id="@+id/subitem_room_j"
+                        android:title="@string/subitem_room_j" />
+                </menu>
+            </item>
 
         </menu>
 

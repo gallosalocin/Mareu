@@ -19,9 +19,9 @@ public class FakeMeetingApiService implements MeetingApiService {
         meetingList.add(meeting);
     }
 
-    //    @Override
-    //    public void deleteMeeting(Meeting meeting) {
-    //        meetingList.remove(meeting);
-    //    }
+    @Override
+    public void deleteMeeting(Meeting meeting) {
+        meetingList.remove(meeting);
+    }
 
 }

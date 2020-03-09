@@ -1,13 +1,28 @@
 <resources>
     <string name="app_name">Ma réu</string>
     <string name="filter_list">filter_list</string>
-    <string name="filter_subitem1">sort by room</string>
-    <string name="filter_subitem2">sort by time</string>
+    <string name="filter_item_name">sort by room</string>
+    <string name="filter_item_time">sort by time</string>
+    <string name="filter_item_date">filter by date</string>
+    <string name="filter_item_room">filter by room</string>
     <string name="save_btn_add_reunion">save</string>
     <string name="set_time">set time</string>
     <string name="set_topic">topic</string>
     <string name="set_email">email</string>
     <string name="time_picker">%1$dh%2$d</string>
+    <string name="set_date">set date</string>
+    <string name="subitem_room_a">Room A</string>
+    <string name="subitem_room_b">Room B</string>
+    <string name="subitem_room_c">Room C</string>
+    <string name="subitem_room_d">Room D</string>
+    <string name="subitem_room_e">Room E</string>
+    <string name="subitem_room_f">Room F</string>
+    <string name="subitem_room_g">Room G</string>
+    <string name="subitem_room_h">Room H</string>
+    <string name="subitem_room_i">Room I</string>
+    <string name="subitem_room_j">Room J</string>
+    <string name="filter_item_reset">reset filter</string>
+
 
     <string-array name="rooms">
         <item>- Choose Room -</item>
