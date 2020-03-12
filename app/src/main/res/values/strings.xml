@@ -22,6 +22,7 @@
     <string name="subitem_room_i">Room I</string>
     <string name="subitem_room_j">Room J</string>
     <string name="filter_item_reset">reset filter</string>
+    <string name="delete">Supprimer</string>
 
 
     <string-array name="rooms">
