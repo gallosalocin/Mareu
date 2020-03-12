@@ -21,13 +21,14 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/tv_cardview_topic"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_cardview_description"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/iv_cardview_image"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="0dp"
+            android:layout_toStartOf="@id/iv_cardview_delete_btn"
             android:layout_toEndOf="@id/iv_cardview_image"
             android:text="Réunion A"
             android:textColor="@android:color/black"
@@ -35,67 +36,10 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_cardview_separator_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/iv_cardview_image"
-            android:layout_marginLeft="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_toEndOf="@id/tv_cardview_topic"
-            android:text="-"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_cardview_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/iv_cardview_image"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="0dp"
-            android:layout_toEndOf="@id/tv_cardview_separator_first"
-            android:text="14h00"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-
-        <TextView
-            android:id="@+id/tv_cardview_separator_second"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/iv_cardview_image"
-            android:layout_marginLeft="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_toEndOf="@id/tv_cardview_time"
-            android:text="-"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-
-        <TextView
-            android:id="@+id/tv_cardview_room"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/iv_cardview_image"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="0dp"
-            android:layout_toEndOf="@id/tv_cardview_separator_second"
-            android:text="Salle A"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-
-        <TextView
             android:id="@+id/tv_cardview_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_cardview_topic"
+            android:layout_below="@id/tv_cardview_description"
             android:layout_alignBottom="@id/iv_cardview_image"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="0dp"

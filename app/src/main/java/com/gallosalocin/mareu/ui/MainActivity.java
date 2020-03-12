@@ -35,6 +35,8 @@ import static java.util.Comparator.comparing;
 public class MainActivity extends AppCompatActivity implements MeetingRecyclerViewAdapter.OnItemClickListener, DatePickerDialog.OnDateSetListener {
 
     private List<Meeting> meetingList;
+    private List<Meeting> meetingListByDate;
+    private List<Meeting> meetingListByRoom;
     private MeetingRecyclerViewAdapter meetingRecyclerViewAdapter;
     private ActivityMainBinding binding;
     private MeetingApiService meetingApiService;
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filterByDate() {
         initRecyclerView();
-        List<Meeting> meetingListByDate = meetingList.stream().filter(meeting -> meeting.getDate().equals(currentDate)).collect(Collectors.toList());
+        meetingListByDate = meetingList.stream().filter(meeting -> meeting.getDate().equals(currentDate)).collect(Collectors.toList());
         binding.recyclerView.setAdapter(new MeetingRecyclerViewAdapter(meetingListByDate, this));
     }
 
@@ -160,15 +162,16 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filterByRoom(String room) {
         initRecyclerView();
-        List<Meeting> meetingListByRoom = meetingList.stream().filter(meeting -> meeting.getRoom().equals(room)).collect(Collectors.toList());
+        meetingListByRoom = meetingList.stream().filter(meeting -> meeting.getRoom().equals(room)).collect(Collectors.toList());
         binding.recyclerView.setAdapter(new MeetingRecyclerViewAdapter(meetingListByRoom, this));
     }
 
     @Override
     public void onDeleteClick(int position) {
+        String descriptionDialog = "\n' " + meetingList.get(position).getTopic() + " - " + meetingList.get(position).getTime() + " - " + meetingList.get(position).getRoom() + " '";
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         myDialog.setTitle("Supprimer");
-        myDialog.setMessage("Supprimer cette réunion de la liste ?");
+        myDialog.setMessage("Êtes-vous sûr de vouloir supprimer :" + descriptionDialog + " ?");
         myDialog.setPositiveButton("Supprimer", (dialog, which) -> {
             meetingApiService.deleteMeeting(meetingList.get(position));
             meetingRecyclerViewAdapter.notifyItemRemoved(position);

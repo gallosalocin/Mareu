@@ -1,6 +1,5 @@
 package com.gallosalocin.mareu.ui;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewAdapter.ViewHolder> {
 
@@ -40,13 +37,11 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: called.");
-
         Meeting meeting = meetingsList.get(position);
+        String descriptionItems = meeting.getTopic() + " - " + meeting.getTime() + " - " + meeting.getRoom();
+
         holder.roomColor.setImageResource(meeting.getRoomColor());
-        holder.topic.setText(meeting.getTopic());
-        holder.time.setText(meeting.getTime());
-        holder.room.setText(meeting.getRoom());
+        holder.description.setText(descriptionItems);
         holder.email.setText(meeting.getEmail());
 
     }
@@ -61,12 +56,8 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
         @BindView(R.id.iv_cardview_image)
         ImageView roomColor;
-        @BindView(R.id.tv_cardview_topic)
-        TextView topic;
-        @BindView(R.id.tv_cardview_time)
-        TextView time;
-        @BindView(R.id.tv_cardview_room)
-        TextView room;
+        @BindView(R.id.tv_cardview_description)
+        TextView description;
         @BindView(R.id.tv_cardview_email)
         TextView email;
         @BindView(R.id.iv_cardview_delete_btn)
