@@ -5,7 +5,7 @@ Application de gestion de réunions.
 
 ![Mareu](https://user-images.githubusercontent.com/49925096/76619765-f06e9700-652b-11ea-8f13-580d38c917d8.gif)
 
-Plusieurs modes de tri et de filtrage des réunions:
+Plusieurs modes de tri et de filtrage des réunions (en appuyant 2 fois sur le bouton `Trier`, on inverse l'ordre) :
 
 ![portrait filtre ](https://user-images.githubusercontent.com/49925096/76686294-ab755e00-661a-11ea-88e1-a3231e627001.png) ![portrait filtre salle](https://user-images.githubusercontent.com/49925096/76686299-b3cd9900-661a-11ea-9f32-a749e4b1502f.png)
 
