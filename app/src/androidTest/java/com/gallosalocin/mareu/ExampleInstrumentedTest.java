@@ -46,13 +46,13 @@ import static org.hamcrest.Matchers.allOf;
         onView(withId(R.id.fab_add_meeting)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
         onView(withId(R.id.spinner_room)).perform(click());
-        onView(withText("Room D")).perform(click());
+        onView(withText("Salle D")).perform(click());
         onView(withId(R.id.text_view_date)).perform(click());
         onView(withText("OK")).perform(click());
         onView(withId(R.id.text_view_time)).perform(click());
         onView(withText("OK")).perform(click());
         onView(withId(R.id.text_input_topic)).perform(typeText("Projet 4"), closeSoftKeyboard());
-        onView(withId(R.id.text_input_email)).perform(typeText("gallos@gmail.com")).perform(pressImeActionButton());
+        onView(withId(R.id.text_input_email)).perform(typeText("gallosalocin@gmail.com")).perform(pressImeActionButton());
         onView(withId(R.id.button_save)).perform(click());
         onView(allOf(withId(R.id.recyclerView), isDisplayed())).check(matches(hasMinimumChildCount(1)));
     }
@@ -64,7 +64,7 @@ import static org.hamcrest.Matchers.allOf;
     public void myMeetingsList_deleteMeeting_shouldCancelDeletionMeeting() {
         onView(allOf(withId(R.id.recyclerView), isDisplayed()));
         onView(withId(R.id.iv_cardview_delete_btn)).perform(click());
-        onView(withText("CANCEL")).perform(click());
+        onView(withText("ANNULER")).perform(click());
         onView(allOf(withId(R.id.recyclerView), isDisplayed())).check(matches(hasMinimumChildCount(1)));
     }
 
@@ -98,7 +98,7 @@ import static org.hamcrest.Matchers.allOf;
         onView(withId(R.id.button_save)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
         onView(withId(R.id.spinner_room)).perform(click());
-        onView(withText("Room D")).perform(click());
+        onView(withText("Salle D")).perform(click());
         onView(withId(R.id.button_save)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
         onView(withId(R.id.text_view_date)).perform(click());

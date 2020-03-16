@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     private MeetingRecyclerViewAdapter meetingRecyclerViewAdapter;
     private ActivityMainBinding binding;
     private MeetingApiService meetingApiService;
-    private boolean stateRoom = true;
-    private boolean stateTime = true;
     private Calendar calendar = Calendar.getInstance();
     private String currentDate;
-    private int state = 0;
+    private boolean stateRoom = true;
+    private boolean stateTime = true;
+    private int stateListChoice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
         setSupportActionBar(binding.toolbar);
 
         configFabAddMeeting();
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_toolbar_reset_filter:
-                state = 0;
+                stateListChoice = 0;
                 initRecyclerView();
                 return true;
             case R.id.item_toolbar_sort_name:
@@ -90,63 +89,93 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
                 sortListByTime();
                 return true;
             case R.id.item_toolbar_filter_date:
-                state = 1;
                 configDatePicker();
-                filterByDate();
-                return true;
-            case R.id.item_toolbar_filter_room:
-                state = 2;
                 return true;
             case R.id.subitem_room_a:
-                filterByRoom("Room A");
+                filterByRoom("Salle A");
                 return true;
             case R.id.subitem_room_b:
-                filterByRoom("Room B");
+                filterByRoom("Salle B");
                 return true;
             case R.id.subitem_room_c:
-                filterByRoom("Room C");
+                filterByRoom("Salle C");
                 return true;
             case R.id.subitem_room_d:
-                filterByRoom("Room D");
+                filterByRoom("Salle D");
                 return true;
             case R.id.subitem_room_e:
-                filterByRoom("Room E");
+                filterByRoom("Salle E");
                 return true;
             case R.id.subitem_room_f:
-                filterByRoom("Room F");
+                filterByRoom("Salle F");
                 return true;
             case R.id.subitem_room_g:
-                filterByRoom("Room G");
+                filterByRoom("Salle G");
                 return true;
             case R.id.subitem_room_h:
-                filterByRoom("Room H");
+                filterByRoom("Salle H");
                 return true;
             case R.id.subitem_room_i:
-                filterByRoom("Room I");
+                filterByRoom("Salle I");
                 return true;
             case R.id.subitem_room_j:
-                filterByRoom("Room J");
+                filterByRoom("Salle J");
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    // CONFIGURATION sort by room
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void sortListByRoom() {
-        initRecyclerView();
-        meetingList.sort(stateRoom ? comparing(Meeting::getRoom) : comparing(Meeting::getRoom).reversed());
+        switch (stateListChoice) {
+            case 0:
+                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                meetingList.sort(stateRoom ? comparing(Meeting::getRoom) : comparing(Meeting::getRoom).reversed());
+                break;
+            case 1:
+                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                meetingListByDate.sort(stateRoom ? comparing(Meeting::getRoom) : comparing(Meeting::getRoom).reversed());
+                break;
+            case 2:
+                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                meetingListByRoom.sort(stateRoom ? comparing(Meeting::getRoom) : comparing(Meeting::getRoom).reversed());
+                break;
+            default:
+                break;
+        }
         stateRoom = !stateRoom;
     }
 
+    // CONFIGURATION sort by time
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void sortListByTime() {
-        initRecyclerView();
-        meetingList.sort(stateTime ? comparing(Meeting::getTime) : comparing(Meeting::getTime).reversed());
+        switch (stateListChoice) {
+            case 0:
+                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                meetingList.sort(stateTime ? comparing(Meeting::getTime) : comparing(Meeting::getTime).reversed());
+                break;
+            case 1:
+                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                meetingListByDate.sort(stateTime ? comparing(Meeting::getTime) : comparing(Meeting::getTime).reversed());
+                break;
+            case 2:
+                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                meetingListByRoom.sort(stateTime ? comparing(Meeting::getTime) : comparing(Meeting::getTime).reversed());
+                break;
+            default:
+                break;
+        }
         stateTime = !stateTime;
     }
 
+    // CONFIGURATION filter by date
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filterByDate() {
+        stateListChoice = 1;
         initRecyclerView();
         meetingListByDate = meetingList.stream().filter(meeting -> meeting.getDate().equals(currentDate)).collect(Collectors.toList());
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByDate, this);
@@ -158,30 +187,36 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         datePicker.show(getSupportFragmentManager(), "date picker");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(calendar.getTime());
+        filterByDate();
     }
+
+    // CONFIGURATION filter by room
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filterByRoom(String room) {
+        stateListChoice = 2;
         initRecyclerView();
         meetingListByRoom = meetingList.stream().filter(meeting -> meeting.getRoom().equals(room)).collect(Collectors.toList());
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByRoom, this);
         binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
     }
 
+    // CONFIGURATION delete button
+
     @Override
     public void onDeleteClick(int position) {
-        String descriptionDialog = "\n' " + meetingList.get(position).getTopic() + " - " + meetingList.get(position).getTime() + " - " + meetingList.get(position).getRoom() + " '";
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         myDialog.setTitle(getString(R.string.delete));
-        myDialog.setMessage("Êtes-vous sûr de vouloir supprimer :" + descriptionDialog + " ?");
-        myDialog.setPositiveButton("Supprimer", (dialog, which) -> {
-            switch (state) {
+        myDialog.setMessage(getResources().getString(R.string.alert_dialog_question, meetingList.get(position).getTopic(), meetingList.get(position).getTime(), meetingList.get(position).getRoom()));
+        myDialog.setPositiveButton(getString(R.string.delete), (dialog, which) -> {
+            switch (stateListChoice) {
                 case 0:
                     meetingApiService.deleteMeeting(meetingList.get(position));
                     break;
@@ -195,12 +230,16 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
                     break;
             }
             meetingRecyclerViewAdapter.notifyItemRemoved(position);
+            initRecyclerView();
+            stateListChoice = 0;
         });
-        myDialog.setNegativeButton("Cancel", (dialog, which) -> {
+        myDialog.setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
 
         });
         myDialog.show();
     }
+
+    // CONFIGURATION fab add meeting
 
     public void configFabAddMeeting() {
         binding.fabAddMeeting.setOnClickListener(view -> {

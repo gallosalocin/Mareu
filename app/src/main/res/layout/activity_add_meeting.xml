@@ -107,13 +107,12 @@
 
     <Button
         android:id="@+id/button_save"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_top_portrait_add_reunion"
         android:backgroundTint="@color/colorPrimary"
-        android:padding="15dp"
         android:text="@string/save_btn_add_reunion"
-        android:textSize="@dimen/text_size_phone_portrait_add_reunion" />
+        android:textSize="16sp" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
