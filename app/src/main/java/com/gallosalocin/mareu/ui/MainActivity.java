@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     private void initRecyclerView() {
         Parcels.unwrap(getIntent().getParcelableExtra("meeting"));
         meetingList = meetingApiService.getMeetings();
-        meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingList, this);
+        meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingList, this, getApplicationContext());
         binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         stateListChoice = 1;
         initRecyclerView();
         meetingListByDate = meetingList.stream().filter(meeting -> meeting.getDate().equals(currentDate)).collect(Collectors.toList());
-        meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByDate, this);
+        meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByDate, this, getApplicationContext());
         binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
     }
 
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         stateListChoice = 2;
         initRecyclerView();
         meetingListByRoom = meetingList.stream().filter(meeting -> meeting.getRoom().equals(room)).collect(Collectors.toList());
-        meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByRoom, this);
+        meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByRoom, this, getApplicationContext());
         binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
     }
 
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     public void onDeleteClick(int position) {
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         myDialog.setTitle(getString(R.string.delete));
-        myDialog.setMessage(getResources().getString(R.string.alert_dialog_question, meetingList.get(position).getTopic(), meetingList.get(position).getTime(), meetingList.get(position).getRoom()));
+        myDialog.setMessage(getString(R.string.alert_dialog_question, meetingList.get(position).getTopic(), meetingList.get(position).getTime(), meetingList.get(position).getRoom()));
         myDialog.setPositiveButton(getString(R.string.delete), (dialog, which) -> {
             switch (stateListChoice) {
                 case 0:
@@ -234,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
             stateListChoice = 0;
         });
         myDialog.setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
-
         });
         myDialog.show();
     }
@@ -247,5 +246,4 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
             startActivity(intent);
         });
     }
-
 }

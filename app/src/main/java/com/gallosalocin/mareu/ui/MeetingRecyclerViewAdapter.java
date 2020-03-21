@@ -1,5 +1,6 @@
 package com.gallosalocin.mareu.ui;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,12 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
     private List<Meeting> meetingsList;
     private OnItemClickListener onItemClickListener;
+    private Context context;
 
-    MeetingRecyclerViewAdapter(List<Meeting> meetings, OnItemClickListener onItemClickListener) {
+    MeetingRecyclerViewAdapter(List<Meeting> meetings, OnItemClickListener onItemClickListener, Context context) {
         this.meetingsList = meetings;
         this.onItemClickListener = onItemClickListener;
+        this.context = context;
     }
 
     @NonNull
@@ -38,7 +41,7 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Meeting meeting = meetingsList.get(position);
-        String descriptionItems = meeting.getTopic() + " - " + meeting.getTime() + " - " + meeting.getRoom();
+        String descriptionItems = context.getString(R.string.description_items, meeting.getTopic(), meeting.getTime(), meeting.getRoom());
 
         holder.roomColor.setImageResource(meeting.getRoomColor());
         holder.description.setText(descriptionItems);
