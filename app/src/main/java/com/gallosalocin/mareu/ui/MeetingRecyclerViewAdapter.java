@@ -8,16 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gallosalocin.mareu.R;
+import com.gallosalocin.mareu.databinding.CardviewMainBinding;
 import com.gallosalocin.mareu.model.Meeting;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewAdapter.ViewHolder> {
 
@@ -34,8 +31,8 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_main, parent, false);
-        return new ViewHolder(view, onItemClickListener);
+        CardviewMainBinding binding = CardviewMainBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(binding, onItemClickListener);
     }
 
     @Override
@@ -57,25 +54,20 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.iv_cardview_image)
-        ImageView roomColor;
-        @BindView(R.id.tv_cardview_description)
-        TextView description;
-        @BindView(R.id.tv_cardview_email)
-        TextView email;
-        @BindView(R.id.iv_cardview_delete_btn)
-        ImageView deleteImage;
-        @BindView(R.id.cardview_meeting)
-        CardView cardView;
+        private ImageView roomColor;
+        private TextView description;
+        private TextView email;
+        private OnItemClickListener onItemClickListener;
 
-        OnItemClickListener onItemClickListener;
-
-        ViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        ViewHolder(@NonNull CardviewMainBinding binding, OnItemClickListener onItemClickListener) {
+            super(binding.getRoot());
             this.onItemClickListener = onItemClickListener;
 
-            deleteImage.setOnClickListener(this);
+            roomColor = binding.ivCardviewColor;
+            description = binding.tvCardviewDescription;
+            email = binding.tvCardviewEmail;
+
+            binding.ivCardviewDeleteBtn.setOnClickListener(this);
         }
 
         @Override
