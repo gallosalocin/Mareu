@@ -15,16 +15,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import com.gallosalocin.mareu.R;
 import com.gallosalocin.mareu.databinding.ActivityAddMeetingBinding;
 import com.gallosalocin.mareu.di.DI;
 import com.gallosalocin.mareu.model.Meeting;
 import com.gallosalocin.mareu.service.MeetingApiService;
-import com.gallosalocin.mareu.utils.DatePickerFragment;
 import com.gallosalocin.mareu.utils.Room;
-import com.gallosalocin.mareu.utils.TimePickerFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 
@@ -36,7 +33,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-public class AddMeetingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+public class AddMeetingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
+        TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
     private MeetingApiService meetingApiService;
     private ActivityAddMeetingBinding binding;
@@ -58,7 +56,6 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         configTimePicker();
         configSpinner();
         saveMeeting();
-
 
     }
 
@@ -98,18 +95,19 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
 
     // CONFIGURATION DatePicker
 
-    public void configDatePicker() {
-        binding.textViewDate.setOnClickListener(view -> {
-            DialogFragment datePicker = new DatePickerFragment();
-            datePicker.show(getSupportFragmentManager(), "date picker");
-        });
+    private void configDatePicker() {
+        binding.textViewDate.setOnClickListener(view -> showDatePickerDialog());
+    }
+
+    private void showDatePickerDialog() {
+        DatePickerDialog datePicker = new DatePickerDialog(this, this, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        datePicker.show();
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(calendar.getTime());
         binding.textViewDate.setText(currentDate);
     }
@@ -117,15 +115,19 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
     // CONFIGURATION TimePicker
 
     public void configTimePicker() {
-        binding.textViewTime.setOnClickListener(view -> {
-            DialogFragment timePicker = new TimePickerFragment();
-            timePicker.show(getSupportFragmentManager(), "time picker");
-        });
+        binding.textViewTime.setOnClickListener(view -> showTimePickerDialog());
+    }
+
+    private void showTimePickerDialog() {
+        TimePickerDialog timePicker = new TimePickerDialog(this, this, calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE), android.text.format.DateFormat.is24HourFormat(this));
+        timePicker.show();
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        binding.textViewTime.setText(getString(R.string.text_view_time, checkDigitTimePicker(hourOfDay), checkDigitTimePicker(minute)));
+        binding.textViewTime.setText(getString(R.string.text_view_time, checkDigitTimePicker(hourOfDay),
+                checkDigitTimePicker(minute)));
     }
 
     public String checkDigitTimePicker(int number) {
@@ -136,7 +138,8 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
 
     private void configChip() {
         Chip chip = new Chip(AddMeetingActivity.this);
-        ChipDrawable drawable = ChipDrawable.createFromAttributes(AddMeetingActivity.this, null, 0, R.style.Widget_MaterialComponents_Chip_Entry);
+        ChipDrawable drawable = ChipDrawable.createFromAttributes(AddMeetingActivity.this, null, 0,
+                R.style.Widget_MaterialComponents_Chip_Entry);
         chip.setChipDrawable(drawable);
         chip.setClickable(false);
         chip.setText(binding.textInputEmail.getText().toString().trim());
@@ -230,7 +233,10 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
             if (!validateRoom() | !validateTopic() | !validateDate() | !validateTime() | !validateEmail()) {
             } else {
                 emailChip = emailChip.substring(0, emailChip.length() - 2) + "";
-                Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(), binding.textInputTopicLayout.getEditText().getText().toString(), binding.textViewDate.getText().toString(), binding.textViewTime.getText().toString(), binding.spinnerRoom.getSelectedItem().toString(), emailChip);
+                Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(),
+                        binding.textInputTopicLayout.getEditText().getText().toString(),
+                        binding.textViewDate.getText().toString(), binding.textViewTime.getText().toString(),
+                        binding.spinnerRoom.getSelectedItem().toString(), emailChip);
                 Intent intent = new Intent(AddMeetingActivity.this, MainActivity.class);
                 meetingApiService.createMeeting(meeting);
                 intent.putExtra("meeting", Parcels.wrap(meeting));
@@ -238,6 +244,4 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
             }
         });
     }
-
-
 }

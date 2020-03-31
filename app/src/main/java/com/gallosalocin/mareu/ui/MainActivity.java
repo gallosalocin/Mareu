@@ -13,7 +13,6 @@ import android.widget.DatePicker;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.gallosalocin.mareu.R;
@@ -21,7 +20,6 @@ import com.gallosalocin.mareu.databinding.ActivityMainBinding;
 import com.gallosalocin.mareu.di.DI;
 import com.gallosalocin.mareu.model.Meeting;
 import com.gallosalocin.mareu.service.MeetingApiService;
-import com.gallosalocin.mareu.utils.DatePickerFragment;
 
 import org.parceler.Parcels;
 
@@ -32,7 +30,8 @@ import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
 
-public class MainActivity extends AppCompatActivity implements MeetingRecyclerViewAdapter.OnItemClickListener, DatePickerDialog.OnDateSetListener {
+public class MainActivity extends AppCompatActivity implements MeetingRecyclerViewAdapter.OnItemClickListener,
+        DatePickerDialog.OnDateSetListener {
 
     private List<Meeting> meetingList;
     private List<Meeting> meetingListByDate;
@@ -136,11 +135,13 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
                 break;
             case 1:
                 binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
-                meetingListByDate.sort(stateRoom ? comparing(Meeting::getRoom) : comparing(Meeting::getRoom).reversed());
+                meetingListByDate.sort(stateRoom ? comparing(Meeting::getRoom) :
+                        comparing(Meeting::getRoom).reversed());
                 break;
             case 2:
                 binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
-                meetingListByRoom.sort(stateRoom ? comparing(Meeting::getRoom) : comparing(Meeting::getRoom).reversed());
+                meetingListByRoom.sort(stateRoom ? comparing(Meeting::getRoom) :
+                        comparing(Meeting::getRoom).reversed());
                 break;
             default:
                 break;
@@ -159,11 +160,13 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
                 break;
             case 1:
                 binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
-                meetingListByDate.sort(stateTime ? comparing(Meeting::getTime) : comparing(Meeting::getTime).reversed());
+                meetingListByDate.sort(stateTime ? comparing(Meeting::getTime) :
+                        comparing(Meeting::getTime).reversed());
                 break;
             case 2:
                 binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
-                meetingListByRoom.sort(stateTime ? comparing(Meeting::getTime) : comparing(Meeting::getTime).reversed());
+                meetingListByRoom.sort(stateTime ? comparing(Meeting::getTime) :
+                        comparing(Meeting::getTime).reversed());
                 break;
             default:
                 break;
@@ -177,14 +180,16 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     public void filterByDate() {
         stateListChoice = 1;
         initRecyclerView();
-        meetingListByDate = meetingList.stream().filter(meeting -> meeting.getDate().equals(currentDate)).collect(Collectors.toList());
+        meetingListByDate =
+                meetingList.stream().filter(meeting -> meeting.getDate().equals(currentDate)).collect(Collectors.toList());
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByDate, this, getApplicationContext());
         binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
     }
 
-    public void configDatePicker() {
-        DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(getSupportFragmentManager(), "date picker");
+    private void configDatePicker() {
+        DatePickerDialog datePicker = new DatePickerDialog(this, this, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePicker.show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -197,13 +202,14 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         filterByDate();
     }
 
-    // CONFIGURATION filter by room
+    //     CONFIGURATION filter by room
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filterByRoom(String room) {
         stateListChoice = 2;
         initRecyclerView();
-        meetingListByRoom = meetingList.stream().filter(meeting -> meeting.getRoom().equals(room)).collect(Collectors.toList());
+        meetingListByRoom =
+                meetingList.stream().filter(meeting -> meeting.getRoom().equals(room)).collect(Collectors.toList());
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByRoom, this, getApplicationContext());
         binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
     }
@@ -214,7 +220,8 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     public void onDeleteClick(int position) {
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         myDialog.setTitle(getString(R.string.delete));
-        myDialog.setMessage(getString(R.string.alert_dialog_question, meetingList.get(position).getTopic(), meetingList.get(position).getTime(), meetingList.get(position).getRoom()));
+        myDialog.setMessage(getString(R.string.alert_dialog_question, meetingList.get(position).getTopic(),
+                meetingList.get(position).getTime(), meetingList.get(position).getRoom()));
         myDialog.setPositiveButton(getString(R.string.delete), (dialog, which) -> {
             switch (stateListChoice) {
                 case 0:
