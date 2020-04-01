@@ -31,19 +31,26 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        CardviewMainBinding binding = CardviewMainBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        CardviewMainBinding binding = CardviewMainBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
+                false);
         return new ViewHolder(binding, onItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Meeting meeting = meetingsList.get(position);
-        String descriptionItems = context.getString(R.string.description_items, meeting.getTopic(), meeting.getTime(), meeting.getRoom());
+        String descriptionItems = context.getString(R.string.description_items, meeting.getTopic(), meeting.getTime()
+                , meeting.getRoom());
 
         holder.roomColor.setImageResource(meeting.getRoomColor());
         holder.description.setText(descriptionItems);
         holder.email.setText(meeting.getEmail());
 
+    }
+
+    void setMeetingsList(List<Meeting> meetings) {
+        meetingsList = meetings;
+        notifyDataSetChanged();
     }
 
     @Override

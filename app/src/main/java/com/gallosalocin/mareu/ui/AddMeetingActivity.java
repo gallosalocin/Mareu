@@ -1,5 +1,6 @@
 package com.gallosalocin.mareu.ui;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -55,6 +56,7 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         configDatePicker();
         configTimePicker();
         configSpinner();
+        cancelMeeting();
         saveMeeting();
 
     }
@@ -108,6 +110,9 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(calendar.getTime());
         binding.textViewDate.setText(currentDate);
     }
@@ -167,6 +172,16 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         }
         return true;
     };
+
+    // CONFIGURATION CancelButton
+
+    private void cancelMeeting() {
+        binding.buttonCancel.setOnClickListener(view -> {
+            Intent intent = new Intent(AddMeetingActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+    }
 
     // CONFIGURATION SaveButton
 
@@ -228,19 +243,19 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     public void saveMeeting() {
         binding.buttonSave.setOnClickListener(view -> {
             if (!validateRoom() | !validateTopic() | !validateDate() | !validateTime() | !validateEmail()) {
+                binding.buttonSave.setBackgroundTintList(this.getResources().getColorStateList(R.color.colorAccent));
             } else {
                 emailChip = emailChip.substring(0, emailChip.length() - 2) + "";
-                Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(),
-                        binding.textInputTopicLayout.getEditText().getText().toString(),
-                        binding.textViewDate.getText().toString(), binding.textViewTime.getText().toString(),
-                        binding.spinnerRoom.getSelectedItem().toString(), emailChip);
+                Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(), binding.textInputTopicLayout.getEditText().getText().toString(), binding.textViewDate.getText().toString(), binding.textViewTime.getText().toString(), binding.spinnerRoom.getSelectedItem().toString(), emailChip);
                 Intent intent = new Intent(AddMeetingActivity.this, MainActivity.class);
                 meetingApiService.createMeeting(meeting);
                 intent.putExtra("meeting", Parcels.wrap(meeting));
                 startActivity(intent);
+                finish();
             }
         });
     }

@@ -1,12 +1,19 @@
 package com.gallosalocin.mareu.model;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import org.parceler.Parcel;
 
-@Parcel public class Meeting {
+@Parcel @Entity public class Meeting {
 
+    @PrimaryKey(autoGenerate = true)
+    int id;
     String topic, date, time, room, email;
     int roomColor;
 
+    @Ignore
     public Meeting() {
     }
 
@@ -18,6 +25,10 @@ import org.parceler.Parcel;
         this.email = email;
         this.date = date;
     }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public int getRoomColor() {
         return roomColor;
@@ -31,7 +42,7 @@ import org.parceler.Parcel;
         return room;
     }
 
-    public void setLieu(String room) {
+    public void setRoom(String room) {
         this.room = room;
     }
 

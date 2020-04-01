@@ -20,6 +20,7 @@ import com.gallosalocin.mareu.databinding.ActivityMainBinding;
 import com.gallosalocin.mareu.di.DI;
 import com.gallosalocin.mareu.model.Meeting;
 import com.gallosalocin.mareu.service.MeetingApiService;
+import com.gallosalocin.mareu.viewmodel.MeetingViewModel;
 
 import org.parceler.Parcels;
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     private boolean stateRoom = true;
     private boolean stateTime = true;
     private int stateListChoice = 0;
+    private MeetingViewModel meetingViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
 
         configFabAddMeeting();
         initRecyclerView();
+
+        //        meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
+        //        meetingViewModel.getAllMeetings().observe(this, meetings -> meetingRecyclerViewAdapter.setMeetingsList(meetings));
     }
 
     private void initRecyclerView() {
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingList, this, getApplicationContext());
         binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     @Override
@@ -251,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         binding.fabAddMeeting.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddMeetingActivity.class);
             startActivity(intent);
+            finish();
         });
     }
 }

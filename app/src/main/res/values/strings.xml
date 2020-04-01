@@ -6,6 +6,7 @@
     <string name="filter_item_date">Filtrer par date</string>
     <string name="filter_item_room">Filtrer par salle</string>
     <string name="save_btn_add_reunion">Sauvegarder</string>
+    <string name="cancel_btn_add_reunion">Annuler</string>
     <string name="set_time">Définir heure</string>
     <string name="set_topic">Sujet</string>
     <string name="set_email">Email</string>

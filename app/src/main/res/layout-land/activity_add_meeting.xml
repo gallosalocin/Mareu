@@ -64,6 +64,7 @@
         android:id="@+id/text_input_topic_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:boxBackgroundColor="@android:color/transparent"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -81,6 +82,7 @@
         android:id="@+id/text_input_email_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:boxBackgroundColor="@android:color/transparent"
         app:errorEnabled="true">
 
         <HorizontalScrollView
@@ -109,13 +111,32 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/button_save"
-        android:layout_width="160dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:backgroundTint="@color/colorPrimary"
-        android:text="@string/save_btn_add_reunion"
-        android:textSize="14sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_weight="2"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/cancel_btn_add_reunion"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_weight="2"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/save_btn_add_reunion"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
