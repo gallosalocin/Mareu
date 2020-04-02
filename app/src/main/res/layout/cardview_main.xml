@@ -4,6 +4,7 @@
     android:id="@+id/cardview_meeting"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
     app:cardCornerRadius="6dp">
 
     <RelativeLayout

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         initRecyclerView();
 
         //        meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
-        //        meetingViewModel.getAllMeetings().observe(this, meetings -> meetingRecyclerViewAdapter.setMeetingsList(meetings));
+        //        meetingViewModel.getAllMeetings().observe(this, meetings -> meetingRecyclerViewAdapter.setMeetings(meetings));
     }
 
     private void initRecyclerView() {
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingList, this, getApplicationContext());
         binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override

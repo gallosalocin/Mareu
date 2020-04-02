@@ -48,14 +48,14 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
     }
 
-    void setMeetingsList(List<Meeting> meetings) {
-        meetingsList = meetings;
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemCount() {
         return meetingsList.size();
+    }
+
+    void setMeetings(List<Meeting> meetings) {
+        meetingsList = meetings;
+        notifyDataSetChanged();
     }
 
 

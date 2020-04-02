@@ -1,6 +1,5 @@
 package com.gallosalocin.mareu.ui;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -66,7 +65,7 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
     public void configSpinner() {
 
         List<Room> roomList = new ArrayList<>();
-        roomList.add(new Room("- Choisir Salle -", R.drawable.logo_mareu));
+        roomList.add(new Room("- Choisir Salle -", R.mipmap.logo_mareu));
         roomList.add(new Room("Salle A", R.drawable.ic_lens_blue));
         roomList.add(new Room("Salle B", R.drawable.ic_lens_yellow));
         roomList.add(new Room("Salle C", R.drawable.ic_lens_blue_marine));
@@ -243,14 +242,16 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         }
     }
 
-    @SuppressLint("ResourceAsColor")
     public void saveMeeting() {
         binding.buttonSave.setOnClickListener(view -> {
             if (!validateRoom() | !validateTopic() | !validateDate() | !validateTime() | !validateEmail()) {
                 binding.buttonSave.setBackgroundTintList(this.getResources().getColorStateList(R.color.colorAccent));
             } else {
                 emailChip = emailChip.substring(0, emailChip.length() - 2) + "";
-                Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(), binding.textInputTopicLayout.getEditText().getText().toString(), binding.textViewDate.getText().toString(), binding.textViewTime.getText().toString(), binding.spinnerRoom.getSelectedItem().toString(), emailChip);
+                Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(),
+                        binding.textInputTopicLayout.getEditText().getText().toString(),
+                        binding.textViewDate.getText().toString(), binding.textViewTime.getText().toString(),
+                        binding.spinnerRoom.getSelectedItem().toString(), emailChip);
                 Intent intent = new Intent(AddMeetingActivity.this, MainActivity.class);
                 meetingApiService.createMeeting(meeting);
                 intent.putExtra("meeting", Parcels.wrap(meeting));
