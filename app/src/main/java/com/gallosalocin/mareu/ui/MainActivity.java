@@ -13,13 +13,12 @@ import android.widget.DatePicker;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.gallosalocin.mareu.R;
 import com.gallosalocin.mareu.databinding.ActivityMainBinding;
-import com.gallosalocin.mareu.di.DI;
 import com.gallosalocin.mareu.model.Meeting;
-import com.gallosalocin.mareu.service.MeetingApiService;
 import com.gallosalocin.mareu.viewmodel.MeetingViewModel;
 
 import org.parceler.Parcels;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     private List<Meeting> meetingListByRoom;
     private MeetingRecyclerViewAdapter meetingRecyclerViewAdapter;
     private ActivityMainBinding binding;
-    private MeetingApiService meetingApiService;
+    //    private MeetingApiService meetingApiService;
     private Calendar calendar = Calendar.getInstance();
     private String currentDate;
     private boolean stateRoom = true;
@@ -50,25 +49,30 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        meetingApiService = DI.getMeetingApiService();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
         setSupportActionBar(binding.toolbar);
-
         configFabAddMeeting();
-        initRecyclerView();
 
-        //        meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
-        //        meetingViewModel.getAllMeetings().observe(this, meetings -> meetingRecyclerViewAdapter.setMeetings(meetings));
+        //        meetingApiService = DI.getMeetingApiService();
+
+        initRecyclerView();
     }
 
     private void initRecyclerView() {
         Parcels.unwrap(getIntent().getParcelableExtra("meeting"));
-        meetingList = meetingApiService.getMeetings();
+
+        //        meetingList = meetingApiService.getMeetings();
+
+        meetingList = meetingViewModel.getAllMeetings(); // JE VOUDRAIS RECUPERER LA LISTE ENTIERE DES REUNIONS POUR
+        // POUVOIR LA PASSER EN PARAMETRE DU CONSTRUCTEUR DE MON ADAPTER JUSTE EN DESSOUS.
+
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingList, this, getApplicationContext());
         binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
+        meetingViewModel.getAllMeetings().observe(this, meetings -> meetingRecyclerViewAdapter.setMeetings(meetings));
     }
 
     @Override
@@ -230,13 +234,16 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         myDialog.setPositiveButton(getString(R.string.delete), (dialog, which) -> {
             switch (stateListChoice) {
                 case 0:
-                    meetingApiService.deleteMeeting(meetingList.get(position));
+                    meetingViewModel.deleteMeeting(meetingList.get(position));
+                    //                    meetingApiService.deleteMeeting(meetingList.get(position));
                     break;
                 case 1:
-                    meetingApiService.deleteMeeting(meetingListByDate.get(position));
+                    meetingViewModel.deleteMeeting(meetingListByDate.get(position));
+                    //                    meetingApiService.deleteMeeting(meetingListByDate.get(position));
                     break;
                 case 2:
-                    meetingApiService.deleteMeeting(meetingListByRoom.get(position));
+                    meetingViewModel.deleteMeeting(meetingListByRoom.get(position));
+                    //                    meetingApiService.deleteMeeting(meetingListByRoom.get(position));
                     break;
                 default:
                     break;

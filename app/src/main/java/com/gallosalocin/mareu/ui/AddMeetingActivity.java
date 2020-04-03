@@ -15,13 +15,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.gallosalocin.mareu.R;
 import com.gallosalocin.mareu.databinding.ActivityAddMeetingBinding;
-import com.gallosalocin.mareu.di.DI;
 import com.gallosalocin.mareu.model.Meeting;
-import com.gallosalocin.mareu.service.MeetingApiService;
 import com.gallosalocin.mareu.utils.Room;
+import com.gallosalocin.mareu.viewmodel.MeetingViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 
@@ -36,10 +36,11 @@ import java.util.Objects;
 public class AddMeetingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
         TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
-    private MeetingApiService meetingApiService;
+    //    private MeetingApiService meetingApiService;
     private ActivityAddMeetingBinding binding;
     private String emailChip = "";
     private Calendar calendar = Calendar.getInstance();
+    private MeetingViewModel meetingViewModel;
 
 
     @Override
@@ -50,7 +51,8 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         View view = binding.getRoot();
         setContentView(view);
         binding.textInputEmail.setOnEditorActionListener(editorListener);
-        meetingApiService = DI.getMeetingApiService();
+        //        meetingApiService = DI.getMeetingApiService();
+        meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
 
         configDatePicker();
         configTimePicker();
@@ -253,7 +255,8 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
                         binding.textViewDate.getText().toString(), binding.textViewTime.getText().toString(),
                         binding.spinnerRoom.getSelectedItem().toString(), emailChip);
                 Intent intent = new Intent(AddMeetingActivity.this, MainActivity.class);
-                meetingApiService.createMeeting(meeting);
+                //                meetingApiService.createMeeting(meeting);
+                meetingViewModel.insertMeeting(meeting);
                 intent.putExtra("meeting", Parcels.wrap(meeting));
                 startActivity(intent);
                 finish();
