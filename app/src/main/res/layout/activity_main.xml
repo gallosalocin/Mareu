@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context="com.gallosalocin.mareu.ui.MainActivity">
 
+    <TextView
+        android:id="@+id/tv_no_meeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:drawableTop="@drawable/ic_chat_black_150dp"
+        android:gravity="center_horizontal"
+        android:text="@string/no_meeting"
+        android:textSize="30sp"
+        tools:visibility="gone" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -17,7 +28,7 @@
         app:titleTextColor="@android:color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerview_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"

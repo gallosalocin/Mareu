@@ -38,11 +38,12 @@ public abstract class MeetingRoomDatabase extends RoomDatabase {
     private static RoomDatabase.Callback populateDatabase = new RoomDatabase.Callback() {
 
         @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
 
             databaseWriteExecutor.execute(() -> {
                 MeetingDao meetingDao = INSTANCE.meetingDao();
+                meetingDao.deleteAllMeetings();
 
                 meetingDao.insertMeeting(new Meeting(R.drawable.ic_lens_yellow, "Projet 4", "3 avr. 2020", "12h00",
                         "Salle B", "gallos.11@gmail.com"));

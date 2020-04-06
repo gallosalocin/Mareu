@@ -6,12 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".ui.AddMeetingActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_add_meeting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        app:title="@string/app_name"
+        app:titleTextColor="@android:color/white" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp">
+
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_view_room_color"
@@ -35,6 +47,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -64,6 +78,8 @@
         android:id="@+id/text_input_topic_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         app:boxBackgroundColor="@android:color/transparent"
         app:errorEnabled="true">
 
@@ -82,6 +98,8 @@
         android:id="@+id/text_input_email_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         app:boxBackgroundColor="@android:color/transparent"
         app:errorEnabled="true">
 
@@ -110,35 +128,5 @@
             android:textSize="@dimen/text_size_phone_landscape_add_reunion" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button_cancel"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_weight="2"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="@string/cancel_btn_add_reunion"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/button_save"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_weight="2"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="@string/save_btn_add_reunion"
-            android:textSize="14sp" />
-    </LinearLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -16,6 +16,9 @@ import java.util.List;
     @Query("SELECT * From Meeting")
     LiveData<List<Meeting>> getAllMeetings();
 
+    @Query("DELETE FROM Meeting")
+    void deleteAllMeetings();
+
     @Insert
     void insertMeeting(Meeting meeting);
 

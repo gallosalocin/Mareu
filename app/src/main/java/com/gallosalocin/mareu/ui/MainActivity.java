@@ -24,6 +24,7 @@ import com.gallosalocin.mareu.viewmodel.MeetingViewModel;
 import org.parceler.Parcels;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     private List<Meeting> meetingListByRoom;
     private MeetingRecyclerViewAdapter meetingRecyclerViewAdapter;
     private ActivityMainBinding binding;
-    //    private MeetingApiService meetingApiService;
     private Calendar calendar = Calendar.getInstance();
     private String currentDate;
     private boolean stateRoom = true;
@@ -54,25 +54,27 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         setContentView(view);
         setSupportActionBar(binding.toolbar);
         configFabAddMeeting();
-
-        //        meetingApiService = DI.getMeetingApiService();
-
         initRecyclerView();
     }
 
     private void initRecyclerView() {
         Parcels.unwrap(getIntent().getParcelableExtra("meeting"));
-
-        //        meetingList = meetingApiService.getMeetings();
-
-        meetingList = meetingViewModel.getAllMeetings(); // JE VOUDRAIS RECUPERER LA LISTE ENTIERE DES REUNIONS POUR
-        // POUVOIR LA PASSER EN PARAMETRE DU CONSTRUCTEUR DE MON ADAPTER JUSTE EN DESSOUS.
-
+        meetingList = new ArrayList<>();
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingList, this, getApplicationContext());
-        binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
+        binding.recyclerviewMain.setLayoutManager(new LinearLayoutManager(this));
         meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
-        meetingViewModel.getAllMeetings().observe(this, meetings -> meetingRecyclerViewAdapter.setMeetings(meetings));
+        meetingViewModel.getAllMeetings().observe(this, meetings -> {
+            meetingList = meetings;
+            if (meetingList.size() == 0) {
+                binding.tvNoMeeting.setVisibility(View.VISIBLE);
+                binding.recyclerviewMain.setVisibility(View.GONE);
+            } else {
+                binding.tvNoMeeting.setVisibility(View.GONE);
+                binding.recyclerviewMain.setVisibility(View.VISIBLE);
+            }
+            meetingRecyclerViewAdapter.setMeetings(meetingList);
+        });
     }
 
     @Override
@@ -139,16 +141,16 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     public void sortListByRoom() {
         switch (stateListChoice) {
             case 0:
-                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
                 meetingList.sort(stateRoom ? comparing(Meeting::getRoom) : comparing(Meeting::getRoom).reversed());
                 break;
             case 1:
-                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
                 meetingListByDate.sort(stateRoom ? comparing(Meeting::getRoom) :
                         comparing(Meeting::getRoom).reversed());
                 break;
             case 2:
-                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
                 meetingListByRoom.sort(stateRoom ? comparing(Meeting::getRoom) :
                         comparing(Meeting::getRoom).reversed());
                 break;
@@ -164,16 +166,16 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     public void sortListByTime() {
         switch (stateListChoice) {
             case 0:
-                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
                 meetingList.sort(stateTime ? comparing(Meeting::getTime) : comparing(Meeting::getTime).reversed());
                 break;
             case 1:
-                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
                 meetingListByDate.sort(stateTime ? comparing(Meeting::getTime) :
                         comparing(Meeting::getTime).reversed());
                 break;
             case 2:
-                binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+                binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
                 meetingListByRoom.sort(stateTime ? comparing(Meeting::getTime) :
                         comparing(Meeting::getTime).reversed());
                 break;
@@ -188,11 +190,17 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filterByDate() {
         stateListChoice = 1;
-        initRecyclerView();
         meetingListByDate =
                 meetingList.stream().filter(meeting -> meeting.getDate().equals(currentDate)).collect(Collectors.toList());
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByDate, this, getApplicationContext());
-        binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+        if (meetingListByDate.size() == 0) {
+            binding.tvNoMeeting.setVisibility(View.VISIBLE);
+            binding.recyclerviewMain.setVisibility(View.GONE);
+        } else {
+            binding.tvNoMeeting.setVisibility(View.GONE);
+            binding.recyclerviewMain.setVisibility(View.VISIBLE);
+        }
+        binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
     }
 
     private void configDatePicker() {
@@ -211,16 +219,22 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         filterByDate();
     }
 
-    //     CONFIGURATION filter by room
+    // CONFIGURATION filter by room
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filterByRoom(String room) {
         stateListChoice = 2;
-        initRecyclerView();
         meetingListByRoom =
                 meetingList.stream().filter(meeting -> meeting.getRoom().equals(room)).collect(Collectors.toList());
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByRoom, this, getApplicationContext());
-        binding.recyclerView.setAdapter(meetingRecyclerViewAdapter);
+        if (meetingListByRoom.size() == 0) {
+            binding.tvNoMeeting.setVisibility(View.VISIBLE);
+            binding.recyclerviewMain.setVisibility(View.GONE);
+        } else {
+            binding.tvNoMeeting.setVisibility(View.GONE);
+            binding.recyclerviewMain.setVisibility(View.VISIBLE);
+        }
+        binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
     }
 
     // CONFIGURATION delete button
@@ -235,15 +249,12 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
             switch (stateListChoice) {
                 case 0:
                     meetingViewModel.deleteMeeting(meetingList.get(position));
-                    //                    meetingApiService.deleteMeeting(meetingList.get(position));
                     break;
                 case 1:
                     meetingViewModel.deleteMeeting(meetingListByDate.get(position));
-                    //                    meetingApiService.deleteMeeting(meetingListByDate.get(position));
                     break;
                 case 2:
                     meetingViewModel.deleteMeeting(meetingListByRoom.get(position));
-                    //                    meetingApiService.deleteMeeting(meetingListByRoom.get(position));
                     break;
                 default:
                     break;
@@ -263,7 +274,6 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         binding.fabAddMeeting.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddMeetingActivity.class);
             startActivity(intent);
-            finish();
         });
     }
 }

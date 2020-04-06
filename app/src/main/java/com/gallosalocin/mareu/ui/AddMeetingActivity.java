@@ -5,6 +5,9 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -13,7 +16,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -36,12 +41,10 @@ import java.util.Objects;
 public class AddMeetingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
         TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
-    //    private MeetingApiService meetingApiService;
     private ActivityAddMeetingBinding binding;
     private String emailChip = "";
     private Calendar calendar = Calendar.getInstance();
     private MeetingViewModel meetingViewModel;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,22 +53,48 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         binding = ActivityAddMeetingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        binding.textInputEmail.setOnEditorActionListener(editorListener);
-        //        meetingApiService = DI.getMeetingApiService();
-        meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
 
+        binding.textInputEmail.setOnEditorActionListener(editorListener);
+        meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
+        configToolbar();
         configDatePicker();
         configTimePicker();
         configSpinner();
-        cancelMeeting();
-        saveMeeting();
+    }
 
+    // CONFIGURATION Toolbar
+
+    public void configToolbar() {
+        setSupportActionBar(binding.tbAddMeeting);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white);
+        binding.tbAddMeeting.setTitle("Ajouter une Réunion");
+    }
+
+    // CONFIGURATION Menu
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.add_meeting_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save_add_meeting:
+                saveMeeting();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     // CONFIGURATION Spinner
 
     public void configSpinner() {
-
         List<Room> roomList = new ArrayList<>();
         roomList.add(new Room("- Choisir Salle -", R.mipmap.logo_mareu));
         roomList.add(new Room("Salle A", R.drawable.ic_lens_blue));
@@ -174,16 +203,6 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         return true;
     };
 
-    // CONFIGURATION CancelButton
-
-    private void cancelMeeting() {
-        binding.buttonCancel.setOnClickListener(view -> {
-            Intent intent = new Intent(AddMeetingActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        });
-    }
-
     // CONFIGURATION SaveButton
 
     private boolean validateRoom() {
@@ -245,22 +264,20 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
     }
 
     public void saveMeeting() {
-        binding.buttonSave.setOnClickListener(view -> {
-            if (!validateRoom() | !validateTopic() | !validateDate() | !validateTime() | !validateEmail()) {
-                binding.buttonSave.setBackgroundTintList(this.getResources().getColorStateList(R.color.colorAccent));
-            } else {
-                emailChip = emailChip.substring(0, emailChip.length() - 2) + "";
-                Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(),
-                        binding.textInputTopicLayout.getEditText().getText().toString(),
-                        binding.textViewDate.getText().toString(), binding.textViewTime.getText().toString(),
-                        binding.spinnerRoom.getSelectedItem().toString(), emailChip);
-                Intent intent = new Intent(AddMeetingActivity.this, MainActivity.class);
-                //                meetingApiService.createMeeting(meeting);
-                meetingViewModel.insertMeeting(meeting);
-                intent.putExtra("meeting", Parcels.wrap(meeting));
-                startActivity(intent);
-                finish();
-            }
-        });
+        if (!validateRoom() | !validateTopic() | !validateDate() | !validateTime() | !validateEmail()) {
+            Toast.makeText(this, "Remplisser tous les champs.", Toast.LENGTH_SHORT).show();
+        } else {
+            emailChip = emailChip.substring(0, emailChip.length() - 2) + "";
+            Meeting meeting = new Meeting((int) binding.imageViewRoomColor.getTag(),
+                    binding.textInputTopicLayout.getEditText().getText().toString(),
+                    binding.textViewDate.getText().toString(), binding.textViewTime.getText().toString(),
+                    binding.spinnerRoom.getSelectedItem().toString(), emailChip);
+            Intent intent = new Intent(AddMeetingActivity.this, MainActivity.class);
+            meetingViewModel.insertMeeting(meeting);
+            intent.putExtra("meeting", Parcels.wrap(meeting));
+            startActivity(intent);
+            finish();
+        }
     }
+
 }
