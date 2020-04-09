@@ -45,7 +45,6 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
         holder.roomColor.setImageResource(meeting.getRoomColor());
         holder.description.setText(descriptionItems);
         holder.email.setText(meeting.getEmail());
-
     }
 
     @Override
@@ -58,6 +57,9 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
         notifyDataSetChanged();
     }
 
+    Meeting getMeetingAt(int position) {
+        return meetingsList.get(position);
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

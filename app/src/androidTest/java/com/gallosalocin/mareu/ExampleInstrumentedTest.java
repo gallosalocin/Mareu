@@ -16,13 +16,16 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
+import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -42,7 +45,7 @@ import static org.hamcrest.Matchers.allOf;
      * When we click on add button, we create a meeting and it's displayed on the main activity.
      */
     @Test
-    public void myMeetingsList_addMeeting_shouldAddMeeting() {
+    public void myMeetingsList_addMeeting_shouldAddMeeting() throws InterruptedException {
         onView(withId(R.id.fab_add_meeting)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
         onView(withId(R.id.spinner_room)).perform(click());
@@ -53,19 +56,21 @@ import static org.hamcrest.Matchers.allOf;
         onView(withText("OK")).perform(click());
         onView(withId(R.id.text_input_topic)).perform(typeText("Projet 4"), closeSoftKeyboard());
         onView(withId(R.id.text_input_email)).perform(typeText("gallosalocin@gmail.com")).perform(pressImeActionButton());
-        onView(withId(R.id.button_save)).perform(click());
-        onView(allOf(withId(R.id.recyclerView), isDisplayed())).check(matches(hasMinimumChildCount(1)));
+        Thread.sleep(500);
+        onView(withId(R.id.save_add_meeting)).perform(click());
+        onView(allOf(withId(R.id.recyclerview_main), isDisplayed())).check(matches(hasMinimumChildCount(1)));
     }
 
     /**
-     * When we click on delete button, we cancel the deletion of a meeting from the main activity list by pressing CANCEL.
+     * When we click on delete button, we cancel the deletion of a meeting from the main activity list by pressing
+     * CANCEL.
      */
     @Test
     public void myMeetingsList_deleteMeeting_shouldCancelDeletionMeeting() {
-        onView(allOf(withId(R.id.recyclerView), isDisplayed()));
-        onView(withId(R.id.iv_cardview_delete_btn)).perform(click());
+        onView(allOf(withId(R.id.recyclerview_main), isDisplayed()));
+        onView(withId(R.id.recyclerview_main)).perform(actionOnItemAtPosition(0, swipeRight()));
         onView(withText("ANNULER")).perform(click());
-        onView(allOf(withId(R.id.recyclerView), isDisplayed())).check(matches(hasMinimumChildCount(1)));
+        onView(withId(R.id.recyclerview_main)).check(matches(hasMinimumChildCount(1)));
     }
 
     /**
@@ -82,38 +87,38 @@ import static org.hamcrest.Matchers.allOf;
      */
     @Test
     public void myMeetingsList_deleteMeeting_shouldRemoveMeeting() {
-        onView(allOf(withId(R.id.recyclerView), isDisplayed()));
-        onView(withId(R.id.iv_cardview_delete_btn)).perform(click());
+        onView(withId(R.id.recyclerview_main)).perform(actionOnItemAtPosition(0, swipeRight()));
         onView(withText("SUPPRIMER")).perform(click());
-        onView(allOf(withId(R.id.recyclerView), isDisplayed())).check(matches(hasMinimumChildCount(0)));
+        onView(withId(R.id.recyclerview_main)).check(matches(hasMinimumChildCount(0)));
     }
 
     /**
      * When we click create a meeting, if one field is empty or not valid we cannot validate.
      */
     @Test
-    public void myMeetingsList_fieldMissing_shouldNotAddMeeting() {
+    public void myMeetingsList_fieldMissing_shouldNotAddMeeting() throws InterruptedException {
         onView(withId(R.id.fab_add_meeting)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
-        onView(withId(R.id.button_save)).perform(click());
+        onView(withId(R.id.save_add_meeting)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
         onView(withId(R.id.spinner_room)).perform(click());
         onView(withText("Salle D")).perform(click());
-        onView(withId(R.id.button_save)).perform(click());
+        onView(withId(R.id.save_add_meeting)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
         onView(withId(R.id.text_view_date)).perform(click());
         onView(withText("OK")).perform(click());
-        onView(withId(R.id.button_save)).perform(click());
+        onView(withId(R.id.save_add_meeting)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
         onView(withId(R.id.text_view_time)).perform(click());
         onView(withText("OK")).perform(click());
-        onView(withId(R.id.button_save)).perform(click());
+        onView(withId(R.id.save_add_meeting)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
         onView(withId(R.id.text_input_topic)).perform(typeText("Projet 4"), closeSoftKeyboard());
-        onView(withId(R.id.button_save)).perform(click());
+        onView(withId(R.id.save_add_meeting)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
         onView(withId(R.id.text_input_email)).perform(typeText("gallosgmail.com")).perform(pressImeActionButton());
-        onView(withId(R.id.button_save)).perform(click());
+        Thread.sleep(500);
+        onView(withId(R.id.save_add_meeting)).perform(click());
         onView(withId(R.id.add_meeting_content)).check(matches(isDisplayed()));
     }
 
@@ -122,6 +127,6 @@ import static org.hamcrest.Matchers.allOf;
      */
     @Test
     public void myMeetingsList_shouldBeEmpty() {
-        onView(allOf(withId(R.id.recyclerView), isDisplayed())).check(matches(hasMinimumChildCount(0)));
+        onView(withId(R.id.recyclerview_main)).check(matches(hasMinimumChildCount(0)));
     }
 }

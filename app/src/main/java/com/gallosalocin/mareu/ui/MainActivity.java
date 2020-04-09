@@ -2,6 +2,7 @@ package com.gallosalocin.mareu.ui;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,16 +11,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gallosalocin.mareu.R;
 import com.gallosalocin.mareu.databinding.ActivityMainBinding;
 import com.gallosalocin.mareu.model.Meeting;
 import com.gallosalocin.mareu.viewmodel.MeetingViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.parceler.Parcels;
 
@@ -28,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 import static java.util.Comparator.comparing;
 
@@ -38,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     private List<Meeting> meetingListByDate;
     private List<Meeting> meetingListByRoom;
     private MeetingRecyclerViewAdapter meetingRecyclerViewAdapter;
+    private RecyclerView recyclerView;
     private ActivityMainBinding binding;
     private Calendar calendar = Calendar.getInstance();
     private String currentDate;
@@ -45,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     private boolean stateTime = true;
     private int stateListChoice = 0;
     private MeetingViewModel meetingViewModel;
+    String deletedMeeting = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +66,11 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         setSupportActionBar(binding.toolbar);
         configFabAddMeeting();
         initRecyclerView();
+        initSwipeRefreshLayout();
+        initSwipe();
     }
+
+    // CONFIGURATION RecyclerView
 
     private void initRecyclerView() {
         Parcels.unwrap(getIntent().getParcelableExtra("meeting"));
@@ -76,6 +91,55 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
             meetingRecyclerViewAdapter.setMeetings(meetingList);
         });
     }
+
+    // CONFIGURATION SwipeRefreshLayout
+
+    private void initSwipeRefreshLayout() {
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            initRecyclerView();
+            stateListChoice = 0;
+            binding.swipeRefreshLayout.setRefreshing(false);
+        });
+    }
+
+    // CONFIGURATION Swipe
+
+    private void initSwipe() {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                deletedMeeting = getString(R.string.alert_dialog_question,
+                        meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()).getTopic(),
+                        meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()).getTime(),
+                        meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()).getRoom());
+
+                meetingViewModel.deleteMeeting(meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()));
+                Snackbar.make(binding.recyclerviewMain, deletedMeeting, Snackbar.LENGTH_LONG).setAction("Undo",
+                        view -> {
+                    meetingViewModel.insertMeeting(meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()));
+                    meetingRecyclerViewAdapter.notifyDataSetChanged();
+                }).show();
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas canvas, @NonNull RecyclerView recyclerView,
+                                    @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+                                    boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(canvas, recyclerView, viewHolder, dX, dY, actionState,
+                        isCurrentlyActive).addBackgroundColor(ContextCompat.getColor(MainActivity.this,
+                        R.color.colorAccent)).addActionIcon(R.drawable.ic_delete_white).create().decorate();
+                super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        }).attachToRecyclerView(binding.recyclerviewMain);
+    }
+
+    // CONFIGURATION OptionsMenu
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -242,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     @Override
     public void onDeleteClick(int position) {
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+        myDialog.setCancelable(false);
         myDialog.setTitle(getString(R.string.delete));
         myDialog.setMessage(getString(R.string.alert_dialog_question, meetingList.get(position).getTopic(),
                 meetingList.get(position).getTime(), meetingList.get(position).getRoom()));
