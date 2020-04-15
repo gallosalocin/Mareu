@@ -5,22 +5,29 @@ Application de gestion de réunions.
 
 Plusieurs modes de tri et de filtrage des réunions (en appuyant 2 fois sur le bouton `Trier`, on inverse l'ordre) :
 
-![portrait filtre ](https://user-images.githubusercontent.com/49925096/76686294-ab755e00-661a-11ea-88e1-a3231e627001.png) ![portrait filtre salle](https://user-images.githubusercontent.com/49925096/76686299-b3cd9900-661a-11ea-9f32-a749e4b1502f.png)
+![menu](https://user-images.githubusercontent.com/49925096/79329238-bbcd7100-7f17-11ea-818d-182522994f9b.png)![menu salle](https://user-images.githubusercontent.com/49925096/79329245-be2fcb00-7f17-11ea-925e-419d1b8b8b11.png)
 
-Mais aussi, confirmation à l'ajout d'une réunion:
+Confirmation à l'ajout d'une réunion:
 
-![portrait add meeting](https://user-images.githubusercontent.com/49925096/76686326-db246600-661a-11ea-93b1-4999a9feddbd.png)
-![error add meeting](https://user-images.githubusercontent.com/49925096/76686328-dd86c000-661a-11ea-9502-d432cb8acaa6.png)
+![choix](https://user-images.githubusercontent.com/49925096/79329378-ff27df80-7f17-11ea-9957-a84ae8b8209e.png)![choix erreurs](https://user-images.githubusercontent.com/49925096/79329384-018a3980-7f18-11ea-9c30-cf85e6eb0ad3.png)
 
+Confirmation de suppression d'une réunion:
+Avec Dialog si bouton Supprimer appuyé,
 
-Fonctionne aussi en mode paysage et sur tablette:
+![dialog delete confirmation](https://user-images.githubusercontent.com/49925096/79329559-4e6e1000-7f18-11ea-9cdd-2c0157741865.png)
 
-![landscape add meeting](https://user-images.githubusercontent.com/49925096/76686346-fabb8e80-661a-11ea-9817-a83b7c6bdc09.png)
+ou avec Snackbar si Swipe pour Supprimer.
 
-![tablet portrait](https://user-images.githubusercontent.com/49925096/76686361-0a3ad780-661b-11ea-9fe4-5ecef25999b5.png)
-![tablet landscape](https://user-images.githubusercontent.com/49925096/76686365-0ad36e00-661b-11ea-9f5a-002f72a7e828.png)
+![swipe delete](https://user-images.githubusercontent.com/49925096/79329671-7f4e4500-7f18-11ea-93a0-0ca158be5380.png)![swipe delete confirmation](https://user-images.githubusercontent.com/49925096/79329675-807f7200-7f18-11ea-8fa5-69888986ce2a.png)
 
+Tirer vers le bas pour Rafraichir la liste:
 
+![Pull down to refresh](https://user-images.githubusercontent.com/49925096/79329768-aa389900-7f18-11ea-81b5-632820e03ccf.png)
+
+Fonctionne aussi en mode paysage:
+
+![landscape main](https://user-images.githubusercontent.com/49925096/79329793-b3296a80-7f18-11ea-982f-d99272a746bf.png)
+![landscape](https://user-images.githubusercontent.com/49925096/79329799-b3c20100-7f18-11ea-8836-8102489ffcdf.png)
 
 ## Installation
 - Depuis Github appuyer sur Clone or download ou copier directement: https://github.com/gallosalocin/Mareu.git
