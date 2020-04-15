@@ -1,7 +1,7 @@
 # Ma réu
 Application de gestion de réunions.
 
-![Mareu](https://user-images.githubusercontent.com/49925096/76619765-f06e9700-652b-11ea-8f13-580d38c917d8.gif)
+![Mareu](https://user-images.githubusercontent.com/49925096/79331324-4368af00-7f1b-11ea-94cc-a917cdfed682.gif)
 
 Plusieurs modes de tri et de filtrage des réunions (en appuyant 2 fois sur le bouton `Trier`, on inverse l'ordre) :
 
