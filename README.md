@@ -5,11 +5,11 @@ Application de gestion de réunions.
 
 Plusieurs modes de tri et de filtrage des réunions (en appuyant 2 fois sur le bouton `Trier`, on inverse l'ordre) :
 
-![menu](https://user-images.githubusercontent.com/49925096/79329238-bbcd7100-7f17-11ea-818d-182522994f9b.png)  ![menu salle](https://user-images.githubusercontent.com/49925096/79329245-be2fcb00-7f17-11ea-925e-419d1b8b8b11.png)
+![menu](https://user-images.githubusercontent.com/49925096/79329238-bbcd7100-7f17-11ea-818d-182522994f9b.png)     ![menu salle](https://user-images.githubusercontent.com/49925096/79329245-be2fcb00-7f17-11ea-925e-419d1b8b8b11.png)
 
 Confirmation à l'ajout d'une réunion:
 
-![choix](https://user-images.githubusercontent.com/49925096/79329378-ff27df80-7f17-11ea-9957-a84ae8b8209e.png)  ![choix erreurs](https://user-images.githubusercontent.com/49925096/79329384-018a3980-7f18-11ea-9c30-cf85e6eb0ad3.png)
+![choix](https://user-images.githubusercontent.com/49925096/79329378-ff27df80-7f17-11ea-9957-a84ae8b8209e.png)     ![choix erreurs](https://user-images.githubusercontent.com/49925096/79329384-018a3980-7f18-11ea-9c30-cf85e6eb0ad3.png)
 
 Confirmation de suppression d'une réunion:
 Avec Dialog si bouton Supprimer appuyé,
@@ -18,7 +18,7 @@ Avec Dialog si bouton Supprimer appuyé,
 
 ou avec Snackbar si Swipe pour Supprimer.
 
-![swipe delete](https://user-images.githubusercontent.com/49925096/79329671-7f4e4500-7f18-11ea-93a0-0ca158be5380.png)  ![swipe delete confirmation](https://user-images.githubusercontent.com/49925096/79329675-807f7200-7f18-11ea-8fa5-69888986ce2a.png)
+![swipe delete](https://user-images.githubusercontent.com/49925096/79329671-7f4e4500-7f18-11ea-93a0-0ca158be5380.png)     ![swipe delete confirmation](https://user-images.githubusercontent.com/49925096/79329675-807f7200-7f18-11ea-8fa5-69888986ce2a.png)
 
 Tirer vers le bas pour Rafraichir la liste:
 
