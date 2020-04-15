@@ -1,5 +1,3 @@
-![lamzone logo](https://user-images.githubusercontent.com/49925096/76612024-c6ad7400-651b-11ea-8b4f-55a83f0ef4b0.png)
-
 # Ma réu
 Application de gestion de réunions.
 
