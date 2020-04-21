@@ -39,14 +39,12 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 import static java.util.Comparator.comparing;
 
-public class MainActivity extends AppCompatActivity implements MeetingRecyclerViewAdapter.OnItemClickListener,
-        DatePickerDialog.OnDateSetListener {
+public class MainActivity extends AppCompatActivity implements MeetingRecyclerViewAdapter.OnItemClickListener, DatePickerDialog.OnDateSetListener {
 
     private List<Meeting> meetingList;
     private List<Meeting> meetingListByDate;
     private List<Meeting> meetingListByRoom;
     private MeetingRecyclerViewAdapter meetingRecyclerViewAdapter;
-    private RecyclerView recyclerView;
     private ActivityMainBinding binding;
     private Calendar calendar = Calendar.getInstance();
     private String currentDate;
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     private boolean stateTime = true;
     private int stateListChoice = 0;
     private MeetingViewModel meetingViewModel;
-    String deletedMeeting = null;
+    String snackMessage = null;
 
 
     @Override
@@ -70,7 +68,9 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         initSwipe();
     }
 
-    // CONFIGURATION RecyclerView
+    /**
+     * CONFIGURATION RecyclerView
+     */
 
     private void initRecyclerView() {
         Parcels.unwrap(getIntent().getParcelableExtra("meeting"));
@@ -92,7 +92,9 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         });
     }
 
-    // CONFIGURATION SwipeRefreshLayout
+    /**
+     * CONFIGURATION SwipeRefreshLayout
+     */
 
     private void initSwipeRefreshLayout() {
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -102,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         });
     }
 
-    // CONFIGURATION Swipe
+    /**
+     * CONFIGURATION Swipe
+     */
 
     private void initSwipe() {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -114,32 +118,43 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                deletedMeeting = getString(R.string.alert_dialog_question,
+                snackMessage = getString(R.string.alert_dialog_question,
                         meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()).getTopic(),
                         meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()).getTime(),
                         meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()).getRoom());
+                Meeting deletedMeeting = meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition());
 
-                meetingViewModel.deleteMeeting(meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()));
-                Snackbar.make(binding.recyclerviewMain, deletedMeeting, Snackbar.LENGTH_LONG).setAction("Undo",
-                        view -> {
-                    meetingViewModel.insertMeeting(meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()));
-                    meetingRecyclerViewAdapter.notifyDataSetChanged();
+                switch (stateListChoice) {
+                    case 0:
+                        meetingViewModel.deleteMeeting(meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()));
+                        break;
+                    case 1:
+                        meetingViewModel.deleteMeeting(meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()));
+                        break;
+                    case 2:
+                        meetingViewModel.deleteMeeting(meetingRecyclerViewAdapter.getMeetingAt(viewHolder.getAdapterPosition()));
+                        break;
+                    default:
+                        break;
+                }
+                Snackbar.make(binding.recyclerviewMain, snackMessage, Snackbar.LENGTH_LONG).setAction("Undo", view -> {
+                    meetingViewModel.insertMeeting(deletedMeeting);
+//                    meetingRecyclerViewAdapter.notifyDataSetChanged();
                 }).show();
             }
 
             @Override
-            public void onChildDraw(@NonNull Canvas canvas, @NonNull RecyclerView recyclerView,
-                                    @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-                                    boolean isCurrentlyActive) {
-                new RecyclerViewSwipeDecorator.Builder(canvas, recyclerView, viewHolder, dX, dY, actionState,
-                        isCurrentlyActive).addBackgroundColor(ContextCompat.getColor(MainActivity.this,
-                        R.color.colorAccent)).addActionIcon(R.drawable.ic_delete_white).create().decorate();
+            public void onChildDraw(@NonNull Canvas canvas, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+                                    float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive).addBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent)).addActionIcon(R.drawable.ic_delete_white).create().decorate();
                 super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         }).attachToRecyclerView(binding.recyclerviewMain);
     }
 
-    // CONFIGURATION OptionsMenu
+    /**
+     * CONFIGURATION OptionsMenu
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -199,7 +214,9 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         return super.onOptionsItemSelected(item);
     }
 
-    // CONFIGURATION sort by room
+    /**
+     * CONFIGURATION sort by room
+     */
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void sortListByRoom() {
@@ -210,13 +227,11 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
                 break;
             case 1:
                 binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
-                meetingListByDate.sort(stateRoom ? comparing(Meeting::getRoom) :
-                        comparing(Meeting::getRoom).reversed());
+                meetingListByDate.sort(stateRoom ? comparing(Meeting::getRoom) : comparing(Meeting::getRoom).reversed());
                 break;
             case 2:
                 binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
-                meetingListByRoom.sort(stateRoom ? comparing(Meeting::getRoom) :
-                        comparing(Meeting::getRoom).reversed());
+                meetingListByRoom.sort(stateRoom ? comparing(Meeting::getRoom) : comparing(Meeting::getRoom).reversed());
                 break;
             default:
                 break;
@@ -224,7 +239,9 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         stateRoom = !stateRoom;
     }
 
-    // CONFIGURATION sort by time
+    /**
+     * CONFIGURATION sort by time
+     */
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void sortListByTime() {
@@ -235,13 +252,11 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
                 break;
             case 1:
                 binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
-                meetingListByDate.sort(stateTime ? comparing(Meeting::getTime) :
-                        comparing(Meeting::getTime).reversed());
+                meetingListByDate.sort(stateTime ? comparing(Meeting::getTime) : comparing(Meeting::getTime).reversed());
                 break;
             case 2:
                 binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
-                meetingListByRoom.sort(stateTime ? comparing(Meeting::getTime) :
-                        comparing(Meeting::getTime).reversed());
+                meetingListByRoom.sort(stateTime ? comparing(Meeting::getTime) : comparing(Meeting::getTime).reversed());
                 break;
             default:
                 break;
@@ -249,13 +264,14 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         stateTime = !stateTime;
     }
 
-    // CONFIGURATION filter by date
+    /**
+     * CONFIGURATION filter by date
+     */
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filterByDate() {
         stateListChoice = 1;
-        meetingListByDate =
-                meetingList.stream().filter(meeting -> meeting.getDate().equals(currentDate)).collect(Collectors.toList());
+        meetingListByDate = meetingList.stream().filter(meeting -> meeting.getDate().equals(currentDate)).collect(Collectors.toList());
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByDate, this, getApplicationContext());
         if (meetingListByDate.size() == 0) {
             binding.tvNoMeeting.setVisibility(View.VISIBLE);
@@ -268,8 +284,8 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
     }
 
     private void configDatePicker() {
-        DatePickerDialog datePicker = new DatePickerDialog(this, this, calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        DatePickerDialog datePicker = new DatePickerDialog(this, this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
         datePicker.show();
     }
 
@@ -283,13 +299,14 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         filterByDate();
     }
 
-    // CONFIGURATION filter by room
+    /**
+     * CONFIGURATION filter by room
+     */
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filterByRoom(String room) {
         stateListChoice = 2;
-        meetingListByRoom =
-                meetingList.stream().filter(meeting -> meeting.getRoom().equals(room)).collect(Collectors.toList());
+        meetingListByRoom = meetingList.stream().filter(meeting -> meeting.getRoom().equals(room)).collect(Collectors.toList());
         meetingRecyclerViewAdapter = new MeetingRecyclerViewAdapter(meetingListByRoom, this, getApplicationContext());
         if (meetingListByRoom.size() == 0) {
             binding.tvNoMeeting.setVisibility(View.VISIBLE);
@@ -301,15 +318,17 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
         binding.recyclerviewMain.setAdapter(meetingRecyclerViewAdapter);
     }
 
-    // CONFIGURATION delete button
+    /**
+     * CONFIGURATION delete button
+     */
 
     @Override
     public void onDeleteClick(int position) {
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         myDialog.setCancelable(false);
         myDialog.setTitle(getString(R.string.delete));
-        myDialog.setMessage(getString(R.string.alert_dialog_question, meetingList.get(position).getTopic(),
-                meetingList.get(position).getTime(), meetingList.get(position).getRoom()));
+        myDialog.setMessage(getString(R.string.alert_dialog_question, meetingList.get(position).getTopic(), meetingList.get(position).getTime(),
+                meetingList.get(position).getRoom()));
         myDialog.setPositiveButton(getString(R.string.delete), (dialog, which) -> {
             switch (stateListChoice) {
                 case 0:
@@ -324,16 +343,17 @@ public class MainActivity extends AppCompatActivity implements MeetingRecyclerVi
                 default:
                     break;
             }
-            meetingRecyclerViewAdapter.notifyItemRemoved(position);
-            initRecyclerView();
-            stateListChoice = 0;
+//            meetingRecyclerViewAdapter.notifyItemRemoved(position);
+//            stateListChoice = 0;
         });
         myDialog.setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
         });
         myDialog.show();
     }
 
-    // CONFIGURATION fab add meeting
+    /**
+     * CONFIGURATION fab add meeting
+     */
 
     public void configFabAddMeeting() {
         binding.fabAddMeeting.setOnClickListener(view -> {

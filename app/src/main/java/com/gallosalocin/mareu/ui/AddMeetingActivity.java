@@ -180,6 +180,7 @@ public class AddMeetingActivity extends AppCompatActivity implements AdapterView
         chip.setText(binding.textInputEmail.getText().toString().trim());
         chip.setOnCloseIconClickListener(view -> {
             Objects.requireNonNull(binding.chipGroup).removeView(chip);
+            emailChip = "";
         });
         Objects.requireNonNull(binding.chipGroup).addView(chip);
         emailChip += chip.getText() + ", ";

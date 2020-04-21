@@ -14,8 +14,7 @@ import com.gallosalocin.mareu.model.Meeting;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Meeting.class}, version = 1, exportSchema = false)
-public abstract class MeetingRoomDatabase extends RoomDatabase {
+@Database(entities = {Meeting.class}, version = 1, exportSchema = false) public abstract class MeetingRoomDatabase extends RoomDatabase {
 
     public abstract MeetingDao meetingDao();
 
@@ -49,9 +48,8 @@ public abstract class MeetingRoomDatabase extends RoomDatabase {
                         "Salle B", "gallos.11@gmail.com"));
                 meetingDao.insertMeeting(new Meeting(R.drawable.ic_lens_violet, "Projet 4", "5 avr. 2020", "09h00",
                         "Salle I", "gallosalocin@gmail.com"));
-                //                meetingDao.insertMeeting(new Meeting(R.drawable.ic_lens_cyan, "Projet 4", "8 avr.
-                //                2020", "03h00",
-                //                        "Salle J", "gallosalocin@gmail.com, gallosalocin@gmail.com, gallosalocin@gmail.com"));
+                meetingDao.insertMeeting(new Meeting(R.drawable.ic_lens_cyan, "Projet 4", "8 avr. 2020", " 03h00", "Salle J", "gallosalocin@gmail" +
+                        ".com, gallosalocin@gmail.com, gallosalocin@gmail.com"));
             });
         }
     };
