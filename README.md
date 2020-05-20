@@ -30,6 +30,17 @@ Fonctionne aussi en mode paysage:
 
 ![landscape](https://user-images.githubusercontent.com/49925096/79329799-b3c20100-7f18-11ea-8836-8102489ffcdf.png)
 
+## Tech/Framework/Library
+- Java
+- MVVM
+- AndroidX
+- ViewBinding
+- SwipeRefreshLayout
+- RecyclerView Swipe Decorator
+- Parceler
+- Circle Image View
+- Room
+
 ## Installation
 - Depuis Github appuyer sur Clone or download ou copier directement: https://github.com/gallosalocin/Mareu.git
 - Dans Android Studio cliquer sur `File`, `New`, `Project from Version Control` et enfin sur `Git`.
