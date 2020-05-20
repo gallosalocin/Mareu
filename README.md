@@ -31,15 +31,15 @@ Fonctionne aussi en mode paysage:
 ![landscape](https://user-images.githubusercontent.com/49925096/79329799-b3c20100-7f18-11ea-8836-8102489ffcdf.png)
 
 ## Tech/Framework/Library
-- Java
-- MVVM
-- AndroidX
-- ViewBinding
-- SwipeRefreshLayout
-- RecyclerView Swipe Decorator
-- Parceler
-- Circle Image View
-- Room
+- [Java](https://developer.android.com/studio/write/java8-support)
+- [MVVM](https://developer.android.com/jetpack/docs/guide)
+- [AndroidX](https://developer.android.com/jetpack/androidx)
+- [ViewBinding](https://developer.android.com/topic/libraries/view-binding)
+- [SwipeRefreshLayout](https://developer.android.com/training/swipe/add-swipe-interface)
+- [RecyclerView Swipe Decorator](https://github.com/xabaras/RecyclerViewSwipeDecorator)
+- [Parceler](https://github.com/johncarl81/parceler)
+- [Circle Image View](https://github.com/hdodenhof/CircleImageView)
+- [Room](https://developer.android.com/jetpack/androidx/releases/room)
 
 ## Installation
 - Depuis Github appuyer sur Clone or download ou copier directement: https://github.com/gallosalocin/Mareu.git
