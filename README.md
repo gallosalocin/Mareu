@@ -34,12 +34,13 @@ Fonctionne aussi en mode paysage:
 - [Java](https://developer.android.com/studio/write/java8-support)
 - [MVVM](https://developer.android.com/jetpack/docs/guide)
 - [AndroidX](https://developer.android.com/jetpack/androidx)
+- [Room](https://developer.android.com/jetpack/androidx/releases/room)
 - [ViewBinding](https://developer.android.com/topic/libraries/view-binding)
 - [SwipeRefreshLayout](https://developer.android.com/training/swipe/add-swipe-interface)
 - [RecyclerView Swipe Decorator](https://github.com/xabaras/RecyclerViewSwipeDecorator)
 - [Parceler](https://github.com/johncarl81/parceler)
 - [Circle Image View](https://github.com/hdodenhof/CircleImageView)
-- [Room](https://developer.android.com/jetpack/androidx/releases/room)
+
 
 ## Installation
 - Depuis Github appuyer sur Clone or download ou copier directement: https://github.com/gallosalocin/Mareu.git
